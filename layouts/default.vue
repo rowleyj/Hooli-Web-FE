@@ -1,11 +1,10 @@
 <template>
   <v-app>
     <v-app-bar
-      :clipped-left="clipped"
       fixed
       app
     >
-      <v-btn fab class="mx-2" x-small>
+      <v-btn fab class="mx-2" x-small to="/">
         <v-img src="/icon.png" style="border-radius: 50%" max-width="40" max-height="40"></v-img>
       </v-btn>
       <v-toolbar-title v-text="title" />
