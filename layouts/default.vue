@@ -18,6 +18,7 @@
       </v-btn>
       <v-btn
         color="primary"
+        @click="loginDialog = true"
       >
         Login
       </v-btn>
@@ -33,15 +34,22 @@
     >
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
+    <login-dialog :dialog="loginDialog" @close="loginDialog = false"/>
   </v-app>
 </template>
 
 <script>
+import LoginDialog from '~/components/LoginDialog.vue';
 export default {
+  components: { LoginDialog },
   data () {
     return {
-      title: 'Hooli'
+      title: 'Hooli',
+      loginDialog: false
     }
+  },
+  methods: {
+
   }
 }
 </script>
