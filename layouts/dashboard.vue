@@ -8,7 +8,7 @@
 				fab
 				class="mx-2"
 				x-small
-				to="/">
+				to="/dashboard">
 				<v-img
 					src="/icon.png"
 					style="border-radius: 50%"
@@ -24,16 +24,10 @@
 			>
 				Purchase
 			</v-btn>
-			<v-btn
-				color="primary"
-				@click="loginDialog = true"
-				v-if="!isLoggedIn"
-			>
-				Login
-			</v-btn>
-			<v-btn
-				v-else>
-				Dashboard
+			<v-btn icon>
+				<v-icon>
+					mdi-dots-vertical
+				</v-icon>
 			</v-btn>
 		</v-app-bar>
 		<v-main>
@@ -47,14 +41,10 @@
 		>
 			<span>&copy; {{ new Date().getFullYear() }}</span>
 		</v-footer>
-		<login-dialog
-			:dialog="loginDialog"
-			@close="loginDialog = false"/>
 	</v-app>
 </template>
 
 <script>
-import LoginDialog from '~/components/loginDialog/LoginDialog.vue';
 export default {
 	computed:{
 		/**
@@ -64,11 +54,16 @@ export default {
 			return !!this.$store.getters['getAccessToken'];
 		}
 	},
-	components: { LoginDialog },
 	data () {
 		return {
 			title: 'Hooli',
 			loginDialog: false
+		}
+	},
+	mounted(){
+		if(!this.isLoggedIn){
+			console.log('redirect');
+			this.$router.push('/')
 		}
 	},
 	methods: {

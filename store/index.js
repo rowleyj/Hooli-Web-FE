@@ -12,7 +12,7 @@ export const getters = {
 	getAccessToken: state => state.accessToken,
 	getAxiosConfig: state => ({
 		headers: {
-			Authorization: `Bearer ${data.accessToken}`
+			Authorization: `Bearer ${state.accessToken}`
 		}
 	})
 }

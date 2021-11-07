@@ -9,7 +9,7 @@ export default {
 
 	// Global page headers: https://go.nuxtjs.dev/config-head
 	head: {
-		titleTemplate: '%s - Hooli',
+		titleTemplate: '%s | Ride Safe',
 		title: 'Hooli',
 		meta: [
 			{ charset: 'utf-8' },
@@ -18,7 +18,7 @@ export default {
 			{ name: 'format-detection', content: 'telephone=no' }
 		],
 		link: [
-			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+			{ rel: 'icon', type: 'image/x-icon', href: '/icon.ico' }
 		]
 	},
 
@@ -28,6 +28,7 @@ export default {
 
 	// Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
 	plugins: [
+		{ src: '~/plugins/vuex-persist', ssr: false }
 	],
 
 	// Auto import components: https://go.nuxtjs.dev/config-components

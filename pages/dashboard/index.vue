@@ -95,6 +95,7 @@ export default {
 		Stats,
 		VideoFeed
 	},
+	layout: 'dashboard',
 	data() {
 		return {
 			tab: 0,
