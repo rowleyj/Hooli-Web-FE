@@ -5,6 +5,7 @@
 				<v-row>
 					<v-col cols="12">
 						<v-text-field
+							v-model="form.name"
 							label="Name"
 							:rules="rules.name"
 							required
@@ -14,6 +15,7 @@
 						cols="12"
 						md="6">
 						<v-text-field
+							v-model="form.height"
 							label="Height"
 							suffix="cm"
 							:rules="rules.height"
@@ -24,6 +26,7 @@
 						cols="12"
 						md="6">
 						<v-text-field
+							v-model="form.weight"
 							label="Weight"
 							suffix="kg"
 							:rules="rules.weight"
@@ -32,6 +35,7 @@
 					</v-col>
 					<v-col cols="12">
 						<v-text-field
+							v-model="form.email"
 							label="Email"
 							:rules="rules.email"
 							required
@@ -39,6 +43,7 @@
 					</v-col>
 					<v-col cols="12">
 						<v-text-field
+							v-model="form.password"
 							label="Password"
 							type="password"
 							:rules="rules.password"
@@ -94,9 +99,13 @@ export default {
 	},
 	methods: {
 		async register(){
-			console.log('register!')
-			let {data, status} = await this.$axios.post('/users', this.form);
+			let { data, status } = await this.$axios.post('/users', this.form);
 			console.log(data, status);
+			if(status === 201){
+				this.$emit('change-view');
+			}else{
+				alert('Unable to create account')
+			}
 		}
 	}
 }

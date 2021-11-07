@@ -23,6 +23,7 @@
 			</login-form>
 			<register-form
 				v-else
+				@change-view="toggleView"
 				@close="closeDialog">
 			</register-form>
 
