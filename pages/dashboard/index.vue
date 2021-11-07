@@ -2,26 +2,37 @@
 	<v-container>
 		<v-card>
 
-			<v-toolbar>
-				<v-toolbar-title>
-					Dashboard
-				</v-toolbar-title>
-				<template v-slot:extension>
-					<v-tabs
-						v-model="tab"
-						align-with-title
-					>
-						<v-tabs-slider color="yellow"></v-tabs-slider>
+			<v-toolbar
+				color="primary"
+				dark>
+				<v-toolbar-title class="pr-4">
+					<div>
+						Dashboard
 
-						<v-tab
-							v-for="item in tabs"
-							:key="item.name"
-						>
-							<v-icon left>{{item.icon}}</v-icon>
-							{{ item.name }}
-						</v-tab>
-					</v-tabs>
-				</template>
+					</div>
+				</v-toolbar-title>
+				<v-divider
+					vertical
+					class="mx-4"></v-divider>
+				<v-spacer></v-spacer>
+				<v-tabs
+					v-model="tab"
+				>
+					<v-tabs-slider color="accent"></v-tabs-slider>
+
+					<v-tab
+						v-for="item in tabs"
+						:key="item.name"
+					>
+						<v-icon left>{{item.icon}}</v-icon>
+						{{ item.name }}
+					</v-tab>
+				</v-tabs>
+				<v-btn
+					icon
+					@click="settingsDialog = true">
+					<v-icon>mdi-cog</v-icon>
+				</v-btn>
 			</v-toolbar>
 			<v-tabs-items v-model="tab">
 				<v-tab-item>
@@ -38,6 +49,36 @@
 				</v-tab-item>
 			</v-tabs-items>
 		</v-card>
+		<v-dialog
+			v-model="settingsDialog"
+			width="600">
+			<v-card width="600">
+				<v-toolbar
+					class="mb-2"
+					color="primary"
+					dark
+					dense>
+					<v-card-title>
+						Settings
+					</v-card-title>
+				</v-toolbar>
+				<v-card-text>
+					form to change profile settings
+					<v-text-field
+						placeholder="Setting 1"
+						clearable></v-text-field>
+				</v-card-text>
+				<v-card-actions>
+					<v-spacer></v-spacer>
+					<v-btn
+						@click="settingsDialog = false"
+						color="accent">Close</v-btn>
+					<v-btn
+						@click="saveSettings()"
+						color="primary">Save</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
 	</v-container>
 </template>
 
@@ -62,7 +103,14 @@ export default {
 				{name: 'Routes', icon: 'mdi-map-marker-account'},
 				{name: 'Stats', icon: 'mdi-chart-timeline-variant'},
 				{name: 'Videos', icon: 'mdi-video'},
-			]
+			],
+			settingsDialog: false
+		}
+	},
+	methods: {
+		saveSettings () {
+			console.log('save settings');
+			this.settingsDialog = false;
 		}
 	}
 }
