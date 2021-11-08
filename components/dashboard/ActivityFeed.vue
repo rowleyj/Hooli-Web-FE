@@ -1,57 +1,20 @@
 <template>
-	<v-container>
-		<v-card
+	<v-container class="mt-0 pa-0">
+		<activity-bar />
+		<v-row
 			v-for="ride in testRides"
-			:key="ride.id"
-			class="mx-8 mb-8 mt-4"
-			hover>
-			<v-toolbar
-				flat
-				color="secondary"
-				dark
-				dense>
-				<v-toolbar-title>{{ride.title}}</v-toolbar-title>
-				<v-spacer></v-spacer>
-				{{toKm(ride.distance)}} km
-
-			</v-toolbar>
-			<v-row>
-				<v-col cols="9">
-					<v-row>
-						<v-container class="pa-4 ma-2">
-							{{ride.description}}
-						</v-container>
-					</v-row>
-					<v-row justify="center">
-						<span class="mx-2">
-							<v-icon>mdi-car-arrow-right</v-icon>{{ride.closePasses}} close passes
-						</span>
-						<span>
-							<v-icon>mdi-fire</v-icon>{{ride.caloriesBurned}} calories burned
-
-						</span>
-
-					</v-row>
-				</v-col>
-				<v-col cols="3">
-					<v-img
-						:src="ride.img"
-						max-height="300"
-						width="300"
-						contain
-						class="pa-1"></v-img>
-					<!-- <Map :height="150" :width="150"/> -->
-				</v-col>
-			</v-row>
-
-		</v-card>
+			:key="ride.id">
+			<activity-card
+				:ride="ride"> </activity-card>
+		</v-row>
 	</v-container>
 </template>
 
 <script>
-import Map from '../Map.vue'
+import ActivityBar from './activities/ActivityBar.vue'
+import ActivityCard from './activities/ActivityCard.vue'
 export default {
-	components: { Map },
+	components: { ActivityCard, ActivityBar },
 	data(){
 		return {
 			testRides: [
@@ -76,10 +39,5 @@ export default {
 			]
 		}
 	},
-	methods: {
-		toKm(distance){
-			return Number(distance/1000).toFixed(2)
-		}
-	}
 }
 </script>

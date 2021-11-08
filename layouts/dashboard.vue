@@ -63,7 +63,8 @@ export default {
 	mounted(){
 		if(!this.isLoggedIn){
 			console.log('redirect');
-			this.$router.push('/')
+			// TODO: not reliable... need to find different soln
+			// this.$router.push('/')
 		}
 	},
 	methods: {

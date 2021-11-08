@@ -32,7 +32,8 @@
 				Login
 			</v-btn>
 			<v-btn
-				v-else>
+				v-else
+				to="/dashboard">
 				Dashboard
 			</v-btn>
 		</v-app-bar>
