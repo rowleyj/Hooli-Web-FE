@@ -13,14 +13,36 @@
 						dense
 						dark>Created Routes
 						<v-spacer></v-spacer>
-						<v-btn
-							icon
-							@click="drawRoute()">
-							<v-icon>
-								mdi-plus</v-icon>
-						</v-btn>
+						<div v-if="!drawingRoute">
+							<v-btn
+								icon
+								@click="drawRoute()">
+								<v-icon>
+									mdi-plus</v-icon>
+							</v-btn>
+						</div>
+						<div v-else>
+							<v-btn
+								icon
+								@click="cancelDraw()">
+								<v-icon>mdi-cancel</v-icon>
+							</v-btn>
+						</div>
+
 					</v-toolbar>
 					<v-list>
+						<v-list-item v-if="drawingRoute">
+							<v-text-field
+								label="Route Name"
+								v-model="newRouteName"></v-text-field>
+							<v-spacer></v-spacer>
+
+							<v-btn
+								icon
+								@click="saveDrawnRoute()">
+								<v-icon>mdi-content-save-check</v-icon>
+							</v-btn>
+						</v-list-item>
 						<v-list-item-group
 							v-model="selected"
 						>
@@ -54,7 +76,13 @@
 							:drawing="drawingRoute"
 							:height="600"
 							width="100%"
-							:zoom="12"/>
+							:zoom="12">
+							<template v-slot:route>
+								<l-polyline
+									:lat-lngs="routeToShow.latlngs"
+									:color="routeToShow.color"> </l-polyline>
+							</template>
+						</Map>
 					</v-row>
 				</v-card>
 			</v-col>
@@ -63,24 +91,32 @@
 </template>
 
 <script>
+import { LPolyline } from 'vue2-leaflet';
 
 export default {
+	computed: {
+		userId(){
+			return this.$store.getters['user/getUserId'];
+		},
+		routes(){
+			return this.$store.getters['routes/getRoutes'];
+		}
+	},
+	components: {
+		LPolyline
+	},
 	data() {
 		return {
 			selected: [],
-			routes: [
-				{
-					name: 'route 1',
-					id: 'abc'
-				},
-				{
-					name: 'route 2',
-					id: 'abc1'
-				}
-			],
 			selectedRoute: null,
 			mapRef: null,
-			drawingRoute: false
+			drawingRoute: false,
+			newRouteName: '',
+			newRoute: {},
+			routeToShow: {
+				color: 'black',
+				latlngs: []
+			}
 		}
 	},
 	methods: {
@@ -89,11 +125,30 @@ export default {
 		 */
 		selectRoute(route){
 			this.selectedRoute = route;
-			console.log(this.$refs);
-			if(this.mapRef && this.mapRef.props){
-				console.log(this.mapRef)
-				this.mapRef.props.zoom = 1
+			this.routeToShow.latlngs = route.geo.coordinates;
+		},
+		/**
+		 * Sends request to save route
+		 */
+		async saveDrawnRoute(){
+			try {
+				const axiosConfig = this.$store.getters['getAxiosConfig'];
+				const coords = Object.values(this.newRoute).map(coord => [coord.lat, coord.lng])
+				const payload = {
+					coords,
+					name: this.newRouteName,
+					user: this.userId
+				}
+				const {data, status} = await this.$axios.post('/route', payload, axiosConfig);
+				console.log(data, status);
+				if(data && status === 201){
+					this.$store.commit('routes/ADD_ROUTE', data);
+					this.cancelDraw();
+				}
+			} catch (error) {
+				console.error(error);
 			}
+
 		},
 		/**
 		 * Registers a reference to the map so we can draw on it
@@ -101,26 +156,42 @@ export default {
 		registerMap(mapRef){
 			this.mapRef = mapRef
 		},
+		/**
+		 * Empty the new route object and cancel draw
+		 */
+		cancelDraw(){
+			this.newRoute = {};
+			this.newRouteName = '';
+			this.drawingRoute = false;
+		},
+		/**
+		 * Enable a user to draw a route on the map, and save the lat/long in an id-keyed map
+		 */
 		drawRoute(){
-			console.log(this.mapRef);
 			this.drawingRoute = true;
-			this.mapRef.mapObject.on('draw:created', (e) => {
-				console.log('draw created', e);
-			})
-			this.mapRef.mapObject.on('draw:edited', (e) => {
-				console.log('draw edited', e);
-			})
-			this.mapRef.mapObject.on('draw:drawstop', (e) => {
-				console.log('draw drawstop', e);
-			})
-			this.mapRef.mapObject.on('draw:drawvertex', ({target}) => {
-				const {_layers: layers} = target;
-				console.log(layers);
-				Object.keys(layers).forEach(layerId => {
-					// doesnt work...
-					// console.log(layerId instanceof L.Polyline);
+			this.mapRef.mapObject.on('draw:drawvertex', (e) => {
+				console.log(e);
+				const {target} = e;
+				// const {_layers: layers} = target;
+				const {layers} = e;
+				// Object.values(layers).forEach(layer => console.log(layer.name));
+				// // console.log(layers);
+				const polyLayers = Object.values(layers._layers).filter(layer => layer._latlng && layer._latlng.lat)
+				console.log(polyLayers);
+				polyLayers.forEach(layer => {
+					this.newRoute[layer._leaflet_id] = {...layer._latlng}
 				})
-			})
+			});
+			// 	this.mapRef.mapObject.on('draw:created', (e) => {
+			// 	})
+			// 	this.mapRef.mapObject.on('draw:edited', (e) => {
+			// 	})
+			// 	this.mapRef.mapObject.on('draw:drawstop', (e) => {
+			// 	})
+			// 	this.mapRef.mapObject.on('draw:drawvertex', (e) => {
+			// 	})
+			// 	this.mapRef.mapObject.on('draw:editvertex', (e) => {
+			// 	})
 		}
 	}
 }

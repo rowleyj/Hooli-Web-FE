@@ -12,6 +12,10 @@ export const mutations = {
 	}
 }
 
+export const getters = {
+	getUserId: state => state.user ? state.user._id : null
+}
+
 export const actions = {
 	async login ({ commit }, payload) {
 		const body = { ...payload, strategy: 'local' }

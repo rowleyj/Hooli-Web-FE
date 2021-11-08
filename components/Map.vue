@@ -8,8 +8,10 @@
 			:zoom="zoom"
 			:center="[centerLat, centerLong]">
 			<l-draw-toolbar
-				v-if="drawing"
+				v-show="drawing"
 				position="topright"/>
+			<slot name="route">
+			</slot>
 			<l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
 			<l-marker :lat-lng="[centerLat,centerLong]"></l-marker>
 		</l-map>
