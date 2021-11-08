@@ -2,8 +2,7 @@
 	<v-toolbar
 		class="mb-4"
 		color="accent"
-		dark
-		dense>
+		height="54">
 		<v-row align="center">
 			<v-col cols="4">
 				<v-text-field
@@ -16,18 +15,15 @@
 
 			<v-spacer></v-spacer>
 
-			<v-btn
-				small
-				class="mr-2"
-				color="primary">
-				<v-icon left>mdi-plus</v-icon>
-				Add Activity</v-btn>
+			<add-activity-dialog />
 		</v-row>
 	</v-toolbar>
 </template>
 
 <script>
+import AddActivityDialog from './AddActivityDialog.vue'
 export default {
+	components: { AddActivityDialog },
 	methods: {
 		/**
 		 * Search and filter the users activities

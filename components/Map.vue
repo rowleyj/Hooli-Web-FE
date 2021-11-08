@@ -4,8 +4,12 @@
 		id="map-wrap"
 		fluid>
 		<l-map
+			ref="map"
 			:zoom="zoom"
 			:center="[centerLat, centerLong]">
+			<l-draw-toolbar
+				v-if="drawing"
+				position="topright"/>
 			<l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
 			<l-marker :lat-lng="[centerLat,centerLong]"></l-marker>
 		</l-map>
@@ -16,6 +20,7 @@
 import L from 'leaflet';
 import "leaflet/dist/images/marker-shadow.png";
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
+import LDrawToolbar from 'vue2-leaflet-draw-toolbar';
 import 'leaflet/dist/leaflet.css';
 
 export default {
@@ -30,6 +35,12 @@ export default {
 		LMap,
 		LTileLayer,
 		LMarker,
+		LDrawToolbar
+	},
+	mounted() {
+		this.$nextTick(() => {
+			this.$emit('register-map', this.$refs.map);
+		});
 	},
 	props: {
 		height: {
@@ -51,6 +62,10 @@ export default {
 		centerLong: {
 			type: Number,
 			default: -79.8277591
+		},
+		drawing: {
+			type: Boolean,
+			default: false
 		}
 	}
 }

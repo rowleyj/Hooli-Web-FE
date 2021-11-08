@@ -4,7 +4,7 @@
 		class="pb-3"
 		no-gutters>
 		<v-btn
-			color="accent"
+			color="primary"
 			class="mx-1"
 			text
 			@click="$emit('close')"
@@ -12,7 +12,7 @@
 			Close
 		</v-btn>
 		<v-btn
-			color="secondary"
+			color="accent"
 			class="mx-1"
 			@click="$emit('submit')"
 		>
