@@ -1,19 +1,28 @@
 <template>
-	<v-container>
-		<v-card
-			class="my-4"
-			shaped
-			width="100%"
-			height="20vh"
-			v-for="video in videos"
-			:key="video.id">
-			<v-card-title>{{video.title}}</v-card-title>
-		</v-card>
+	<v-container class="ma-0 pa-0">
+		<video-bar />
+		<v-row
+			justify="center"
+		>
+			<v-col
+				cols="12"
+				md="4"
+				v-for="video in videos"
+				:key="video.id">
+				<video-card :title="video.title"/>
+			</v-col>
+		</v-row>
 	</v-container>
 </template>
 
 <script>
+import VideoBar from './videos/VideoBar.vue'
+import VideoCard from './videos/VideoCard.vue'
 export default {
+	components: {
+		VideoBar,
+		VideoCard
+	},
 	data(){
 		return {
 			videos: [

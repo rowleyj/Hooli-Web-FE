@@ -8,12 +8,12 @@
 			:zoom="zoom"
 			:center="[centerLat, centerLong]">
 			<l-draw-toolbar
-				v-show="drawing"
 				position="topright"/>
-			<slot name="route">
-			</slot>
+
 			<l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
 			<l-marker :lat-lng="[centerLat,centerLong]"></l-marker>
+			<slot name="route">
+			</slot>
 		</l-map>
 	</v-container>
 </template>
