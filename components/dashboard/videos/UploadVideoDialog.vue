@@ -66,6 +66,9 @@ export default {
 	computed: {
 		accessToken() {
 			return this.$store.getters['getAccessToken'];
+		},
+		axiosConfig() {
+			return this.$store.getters['getAxiosConfig'];
 		}
 	},
 	components: { SubmitButtons },
@@ -95,10 +98,18 @@ export default {
 		/**
 		 * Upload a single ride video to server
 		 */
-		uploadVideo(){
-			console.log('upload video')
-			const formData = new FormData();
-			formData.append("video", this.videoFile);
+		async uploadVideo(){
+			try {
+				console.log('upload video')
+				const formData = new FormData();
+				formData.append("video", this.videoFile);
+
+				let response = await this.$axios.post('/video', formData, this.axiosConfig);
+				console.log('res', response);
+			} catch (error) {
+				console.log(error);
+			}
+
 		}
 	},
 	props: {

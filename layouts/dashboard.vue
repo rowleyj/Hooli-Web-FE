@@ -24,11 +24,7 @@
 			>
 				Purchase
 			</v-btn>
-			<v-btn icon>
-				<v-icon>
-					mdi-dots-vertical
-				</v-icon>
-			</v-btn>
+			<nav-menu> </nav-menu>
 		</v-app-bar>
 		<v-main>
 			<v-container>
@@ -53,6 +49,9 @@ export default {
 		isLoggedIn(){
 			return !!this.$store.getters['getAccessToken'];
 		}
+	},
+	components: {
+		NavMenu
 	},
 	data () {
 		return {

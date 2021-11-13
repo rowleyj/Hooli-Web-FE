@@ -89,6 +89,14 @@ import VideoFeed from '@/components/dashboard/VideoFeed.vue'
 import Routes from '@/components/dashboard/Routes.vue'
 
 export default {
+	computed: {
+		accessToken(){
+			return this.$store.getters['getAccessToken'];
+		},
+		axiosConfig(){
+			return this.$store.getters['getAxiosConfig']
+		}
+	},
 	components: {
 		Routes,
 		ActivityFeed,
@@ -109,9 +117,20 @@ export default {
 		}
 	},
 	methods: {
+		init(){
+			let axiosConfig = this.$store.getters['getAxiosConfig'];
+			this.$store.dispatch('routes/fetchRoutes', axiosConfig);
+		},
 		saveSettings () {
 			console.log('save settings');
 			this.settingsDialog = false;
+		}
+	},
+	watch: {
+		accessToken(newVal, oldVal){
+			if(newVal){
+				this.init();
+			}
 		}
 	}
 }

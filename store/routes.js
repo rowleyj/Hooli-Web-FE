@@ -16,5 +16,12 @@ export const getters = {
 }
 
 export const actions = {
-
+	async fetchRoutes ({ commit, getters }, axiosConfig) {
+		const { data } = await this.$axios.get('/route', axiosConfig)
+		const routes = data.data;
+		console.log('routes', routes);
+		routes.forEach(route => {
+			commit('ADD_ROUTE', route);
+		})
+	}
 };

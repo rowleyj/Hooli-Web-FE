@@ -18,5 +18,9 @@ export const getters = {
 }
 
 export const actions = {
-
+	logout ({ commit }) {
+		commit('SET_ACCESS_TOKEN', null);
+		commit('user/CLEAR_USER');
+		commit('routes/CLEAR_ROUTES');
+	}
 };
