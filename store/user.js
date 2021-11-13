@@ -17,12 +17,20 @@ export const getters = {
 }
 
 export const actions = {
-	async login ({ commit }, payload) {
+	async login ({ commit, getters, dispatch }, payload) {
 		const body = { ...payload, strategy: 'local' }
 		const { data } = await this.$axios.post('/authentication', body);
 		if (data && data.accessToken) {
 			commit('SET_ACCESS_TOKEN', data.accessToken, { root: true })
 			commit('SET_USER', data.users)
+
+			let axiosConfig = {
+				headers: {
+					Authorization: `Bearer ${data.accessToken}`
+				}
+			};
+			dispatch('routes/fetchRoutes', axiosConfig, { root: true });
+			dispatch('videos/fetchVideos', axiosConfig, { root: true });
 			return true;
 		}
 		return false;

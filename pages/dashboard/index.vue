@@ -118,8 +118,7 @@ export default {
 	},
 	methods: {
 		init(){
-			let axiosConfig = this.$store.getters['getAxiosConfig'];
-			this.$store.dispatch('routes/fetchRoutes', axiosConfig);
+
 		},
 		saveSettings () {
 			console.log('save settings');

@@ -8,8 +8,10 @@
 				cols="12"
 				md="4"
 				v-for="video in videos"
-				:key="video.id">
-				<video-card :title="video.title"/>
+				:key="video._id">
+				<video-card
+					:video="video"
+					@delete-video="deleteVideo"/>
 			</v-col>
 		</v-row>
 	</v-container>
@@ -19,29 +21,33 @@
 import VideoBar from './videos/VideoBar.vue'
 import VideoCard from './videos/VideoCard.vue'
 export default {
+	computed:{
+		videos(){
+			return this.$store.getters['videos/getVideos'];
+		},
+		axiosConfig() {
+			return this.$store.getters['getAxiosConfig'];
+		}
+	},
 	components: {
 		VideoBar,
 		VideoCard
 	},
 	data(){
 		return {
-			videos: [
-				{
-					title: 'ride video 1',
-					id: 'rd1',
-					length: 178060
-				},
-				{
-					title: 'close pass 1',
-					id: 'cp1',
-					length: 35000
-				},
-				{
-					title: 'close pass 2',
-					id: 'cp2',
-					length: 31000
+		}
+	},
+	methods:{
+		async deleteVideo(id){
+			try {
+				const {status} = await this.$axios.delete(`/video/${id}`, this.axiosConfig);
+				if(status == 200){
+					this.$store.commit('videos/REMOVE_VIDEO', id);
 				}
-			]
+			} catch (error) {
+				console.log(error);
+			}
+
 		}
 	}
 }

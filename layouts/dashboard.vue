@@ -24,7 +24,7 @@
 			>
 				Purchase
 			</v-btn>
-			<nav-menu> </nav-menu>
+			<nav-menu/>
 		</v-app-bar>
 		<v-main>
 			<v-container>
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import NavMenu from '~/components/nav/NavMenu.vue';
 export default {
 	computed:{
 		/**

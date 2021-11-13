@@ -49,6 +49,11 @@
 					@change="previewVideo"
 					label="Video"
 					prepend-icon="mdi-video"></v-file-input>
+				<v-text-field
+					v-model="title"
+					label="Title">
+
+				</v-text-field>
 			</v-card-text>
 			<submit-buttons
 				submit-text="Upload Video"
@@ -76,7 +81,8 @@ export default {
 		return {
 			dialog: false,
 			videoFile: null,
-			videoUrl: null
+			videoUrl: null,
+			title: ''
 		}
 	},
 	methods: {
@@ -103,9 +109,15 @@ export default {
 				console.log('upload video')
 				const formData = new FormData();
 				formData.append("video", this.videoFile);
+				formData.append("title", this.title);
 
-				let response = await this.$axios.post('/video', formData, this.axiosConfig);
-				console.log('res', response);
+				const {data, status} = await this.$axios.post('/video', formData, this.axiosConfig);
+				if(status == 201){
+					this.$store.commit('videos/ADD_VIDEO', data);
+					this.closeDialog()
+				}else{
+					throw Error('unable to add video');
+				}
 			} catch (error) {
 				console.log(error);
 			}

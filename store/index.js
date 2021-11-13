@@ -22,5 +22,6 @@ export const actions = {
 		commit('SET_ACCESS_TOKEN', null);
 		commit('user/CLEAR_USER');
 		commit('routes/CLEAR_ROUTES');
+		commit('videos/CLEAR_VIDEOS');
 	}
 };

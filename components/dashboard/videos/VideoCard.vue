@@ -10,9 +10,14 @@
 				dark
 				dense>
 				<v-toolbar-title>
-					{{title}}
+					{{video.title}}
 				</v-toolbar-title>
 				<v-spacer></v-spacer>
+				<v-btn
+					icon
+					@click="$emit('delete-video', video._id)">
+					<v-icon>mdi-delete</v-icon>
+				</v-btn>
 			</v-toolbar>
 
 			<v-row
@@ -22,7 +27,7 @@
 					height="200px"
 				>
 					<source
-						src="/test_vid.mp4"
+						:src="video.url"
 						type="video/mp4">
 					Your browser does not support the video tag. </video>
 			</v-row>
@@ -35,9 +40,15 @@
 <script>
 export default {
 	props: {
-		title: {
-			type: String,
-			default: null
+		video: {
+			type: Object,
+			default: () => {
+				return {
+					title: '',
+					_id: '',
+					url: ''
+				}
+			}
 		}
 	}
 }
