@@ -13,6 +13,9 @@
 						dense
 						dark>Created Routes
 						<v-spacer></v-spacer>
+						<v-btn icon>
+							<v-icon @click="showFilter = true">mdi-filter</v-icon>
+						</v-btn>
 						<div v-if="!drawingRoute">
 							<v-btn
 								icon
@@ -28,7 +31,16 @@
 								<v-icon>mdi-cancel</v-icon>
 							</v-btn>
 						</div>
-
+					</v-toolbar>
+					<v-toolbar
+						dense
+						color="accent"
+						v-if="showFilter">
+						<v-text-field
+							placeholder="Search routes"
+							hide-details
+							append-icon="mdi-magnify"
+							v-model="textFilter"></v-text-field>
 					</v-toolbar>
 					<v-list>
 						<v-list-item v-if="drawingRoute">
@@ -47,13 +59,14 @@
 							v-model="selected"
 						>
 							<v-list-item
-								v-for="route in routes"
+								v-for="route in filteredRoutes"
 								:key="route.id"
 								@click="selectRoute(route)">
-								<v-list-item-content>
+								<v-row class="px-4">
 									{{route.name}}
-
-								</v-list-item-content>
+									<v-spacer></v-spacer>
+									<route-menu/>
+								</v-row>
 							</v-list-item>
 						</v-list-item-group>
 
@@ -92,6 +105,7 @@
 
 <script>
 import { LPolyline } from 'vue2-leaflet';
+import RouteMenu from './routes/RouteMenu.vue';
 
 export default {
 	computed: {
@@ -100,13 +114,22 @@ export default {
 		},
 		routes(){
 			return this.$store.getters['routes/getRoutes'];
+		},
+		filteredRoutes(){
+			if(this.textFilter && this.routes){
+				return this.routes.filter(route => this.$_.get(route, 'name', '').includes(this.textFilter));
+			}
+			return this.routes;
 		}
 	},
 	components: {
-		LPolyline
+		LPolyline,
+		RouteMenu
 	},
 	data() {
 		return {
+			showFilter: false,
+			textFilter: '',
 			selected: [],
 			selectedRoute: null,
 			mapRef: null,
@@ -137,7 +160,8 @@ export default {
 				const payload = {
 					coords,
 					name: this.newRouteName,
-					user: this.userId
+					user: this.userId,
+					custom: true
 				}
 				const {data, status} = await this.$axios.post('/route', payload, axiosConfig);
 				console.log(data, status);

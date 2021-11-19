@@ -12,6 +12,7 @@
 			Close
 		</v-btn>
 		<v-btn
+			:disabled="disabled"
 			color="accent"
 			class="mx-1"
 			@click="$emit('submit')"
@@ -27,6 +28,10 @@ export default {
 		submitText: {
 			type: String,
 			default: 'Submit'
+		},
+		disabled:{
+			type: Boolean,
+			default: false
 		}
 	}
 }
