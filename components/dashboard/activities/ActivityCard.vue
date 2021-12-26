@@ -1,6 +1,7 @@
 <template>
 	<v-card
-		class="mx-8 mb-8 mt-4"
+		class="mx-8 mb-8 mt-4 pb-2"
+		@click="viewActivity"
 		hover>
 		<v-toolbar
 			flat
@@ -17,19 +18,19 @@
 		<v-row>
 			<v-col cols="9">
 				<v-row>
-					<v-container class="pa-4 ma-2">
+					<v-container class="px-4 pt-2 pb-0 ma-2">
 						{{ride.description}}
 					</v-container>
 				</v-row>
-				<v-row justify="center">
+				<v-row
+					justify="center"
+					class="py-2">
 					<span class="mx-2">
 						<v-icon>mdi-car-arrow-right</v-icon>{{ride.closePasses}} close passes
 					</span>
 					<span>
 						<v-icon>mdi-fire</v-icon>{{ride.caloriesBurned}} calories burned
-
 					</span>
-
 				</v-row>
 			</v-col>
 			<v-col cols="3">
@@ -51,6 +52,15 @@ import Distance from '~/components/Distance.vue'
 export default {
 	components: {
 		Distance
+	},
+	methods: {
+		viewActivity(){
+			if(this.ride && this.ride.id){
+				this.$router.push(`/activity/${this.ride.id}`);
+			}else{
+				console.error('Unable to find ride');
+			}
+		}
 	},
 	props: {
 		ride: {

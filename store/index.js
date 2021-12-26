@@ -23,5 +23,6 @@ export const actions = {
 		commit('user/CLEAR_USER');
 		commit('routes/CLEAR_ROUTES');
 		commit('videos/CLEAR_VIDEOS');
+		commit('activities/CLEAR_RIDES');
 	}
 };
