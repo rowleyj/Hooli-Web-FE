@@ -27,10 +27,19 @@
 export default {
 	methods:{
 		async deleteRoute(){
-			console.log('delete route');
+			let isDeleted = await this.$store.dispatch('routes/deleteRoute', this.routeId);
+			if(!isDeleted){
+				alert('Unable to delete route!');
+			}
 		},
 		async hideRoute(){
 			console.log('hide route');
+		}
+	},
+	props: {
+		routeId: {
+			type: String,
+			default: ''
 		}
 	}
 }

@@ -60,12 +60,12 @@
 						>
 							<v-list-item
 								v-for="route in filteredRoutes"
-								:key="route.id"
+								:key="route._id"
 								@click="selectRoute(route)">
 								<v-row class="px-4">
 									{{route.name}}
 									<v-spacer></v-spacer>
-									<route-menu/>
+									<route-menu :routeId="route._id"/>
 								</v-row>
 							</v-list-item>
 						</v-list-item-group>
