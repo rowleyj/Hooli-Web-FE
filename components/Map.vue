@@ -14,6 +14,8 @@
 			<l-marker :lat-lng="[centerLat,centerLong]"></l-marker>
 			<slot name="route">
 			</slot>
+			<slot name="closepassmarkers">
+			</slot>
 		</l-map>
 	</v-container>
 </template>

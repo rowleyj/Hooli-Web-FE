@@ -97,6 +97,16 @@
 									:lat-lngs="routeToShow.latlngs"
 									:color="routeToShow.color"> </l-polyline>
 							</template>
+							<template v-slot:closepassmarkers>
+								<div
+									v-for="(closePass, index) in closePasses"
+									:key="`closePass${index}`">
+									<l-marker
+
+										:lat-lng="[closePass.lat, closePass.long]"></l-marker>
+								</div>
+
+							</template>
 						</Map>
 					</v-row>
 				</v-card>
@@ -106,7 +116,7 @@
 </template>
 
 <script>
-import { LPolyline } from 'vue2-leaflet';
+import { LPolyline, LMarker } from 'vue2-leaflet';
 import RouteMenu from './routes/RouteMenu.vue';
 
 export default {
@@ -126,6 +136,7 @@ export default {
 	},
 	components: {
 		LPolyline,
+		LMarker,
 		RouteMenu
 	},
 	data() {
@@ -145,7 +156,21 @@ export default {
 			center: {
 				lat: 50,
 				long: 85
-			}
+			},
+			closePasses: [
+				{
+					lat: 44.37829479,
+					long: -79.7105945
+				},
+				{
+					lat: 44.5,
+					long: -78
+				},
+				{
+					lat: 43.5,
+					long: -78
+				},
+			]
 		}
 	},
 	methods: {
@@ -155,14 +180,15 @@ export default {
 		selectRoute(route){
 			this.selectedRoute = route;
 			this.routeToShow.latlngs = route.geo.coordinates;
-			this.centerOnRoute(route.geo.coordinates);
+			this.centerOnRouteStart(route.geo.coordinates);
 		},
-		centerOnRoute(coordinates){
-			console.log('centering')
+		/**
+		 * Centers map on start of a route
+		 * @param {number[][]} coordinates = list of [lat, long]
+		 */
+		centerOnRouteStart(coordinates){
 			if(coordinates && coordinates.length){
-				console.log('on', coordinates);
 				const [lat,long] = coordinates[0]
-				console.log(lat, long)
 				Object.assign(this.center, {lat, long});
 			}else{
 				console.warn('No coordinates to center on');
