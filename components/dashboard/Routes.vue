@@ -89,7 +89,9 @@
 							:drawing="drawingRoute"
 							:height="600"
 							width="100%"
-							:zoom="12">
+							:zoom="12"
+							:centerLat="center.lat"
+							:centerLong="center.long">
 							<template v-slot:route>
 								<l-polyline
 									:lat-lngs="routeToShow.latlngs"
@@ -139,6 +141,10 @@ export default {
 			routeToShow: {
 				color: 'black',
 				latlngs: []
+			},
+			center: {
+				lat: 50,
+				long: 85
 			}
 		}
 	},
@@ -149,6 +155,18 @@ export default {
 		selectRoute(route){
 			this.selectedRoute = route;
 			this.routeToShow.latlngs = route.geo.coordinates;
+			this.centerOnRoute(route.geo.coordinates);
+		},
+		centerOnRoute(coordinates){
+			console.log('centering')
+			if(coordinates && coordinates.length){
+				console.log('on', coordinates);
+				const [lat,long] = coordinates[0]
+				console.log(lat, long)
+				Object.assign(this.center, {lat, long});
+			}else{
+				console.warn('No coordinates to center on');
+			}
 		},
 		/**
 		 * Sends request to save route
