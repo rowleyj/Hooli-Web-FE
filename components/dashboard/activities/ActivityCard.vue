@@ -12,54 +12,81 @@
 				{{ride.title}}
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<distance :distance="ride.distance"/>
+			<distance :distance="$_.get(ride, 'stats.distance', 0)"/>
+			<v-btn icon>
+				<v-icon @click.stop="removeRide">mdi-delete</v-icon>
+			</v-btn>
 
 		</v-toolbar>
+		<v-row class="pt-1">
+			<Map
+				:centerLat="centerLat"
+				:centerLong="centerLong"
+			/>
+		</v-row>
 		<v-row>
-			<v-col cols="9">
-				<v-row>
-					<v-container class="px-4 pt-2 pb-0 ma-2">
-						{{ride.description}}
-					</v-container>
-				</v-row>
-				<v-row
-					justify="center"
-					class="py-2">
-					<span class="mx-2">
-						<v-icon>mdi-car-arrow-right</v-icon>{{ride.closePasses}} close passes
-					</span>
-					<span>
-						<v-icon>mdi-fire</v-icon>{{ride.caloriesBurned}} calories burned
-					</span>
-				</v-row>
-			</v-col>
-			<v-col cols="3">
-				<v-img
-					:src="ride.img"
-					max-height="300"
-					width="300"
-					contain
-					class="pa-1"></v-img>
-					<!-- <Map :height="150" :width="150"/> -->
-			</v-col>
+			<v-container>
+				{{ride.description}}
+			</v-container>
+		</v-row>
+		<v-row
+			justify="center"
+			class="py-2 px-4">
+			<span class="mx-2">
+				<v-icon>mdi-car-arrow-right</v-icon>{{numberClosePasses}} close passes
+			</span>
+			<span v-if="caloriesBurned">
+				<v-icon>mdi-fire</v-icon>{{caloriesBurned}} calories burned
+			</span>
 		</v-row>
 
 	</v-card>
 </template>
 
 <script>
-import Distance from '~/components/Distance.vue'
+import Distance from '~/components/Distance.vue';
+
 export default {
+	computed: {
+		numberClosePasses() {
+			if (this.ride.closePasses) return this.ride.closePasses.length;
+			return 0;
+		},
+		caloriesBurned() {
+			if (this.ride.stats && this.ride.stats.caloriesBurned) {
+				return this.ride.stats.caloriesBurned.toFixed(1);
+			}
+			return null;
+		},
+		center() {
+			return this.$_.get(this.route, 'geo.coordinates[0]', [50, 50]);
+		},
+		centerLat() {
+			return this.center[0];
+		},
+		centerLong() {
+			return this.center[1];
+		},
+		route() {
+			if (this.ride && this.ride.routeId) {
+				return this.$store.getters['routes/getRouteById'](this.ride.routeId);
+			}
+			return null;
+		}
+	},
 	components: {
-		Distance
+		Distance,
 	},
 	methods: {
-		viewActivity(){
-			if(this.ride && this.ride.id){
+		viewActivity() {
+			if (this.ride && this.ride.id) {
 				this.$router.push(`/activity/${this.ride.id}`);
-			}else{
+			} else {
 				console.error('Unable to find ride');
 			}
+		},
+		removeRide() {
+			this.$store.dispatch('activities/deleteRide', this.ride._id);
 		}
 	},
 	props: {
@@ -72,7 +99,7 @@ export default {
 				type: Number,
 				default: 0
 			},
-			closePasses:  {
+			closePasses: {
 				type: Number,
 				default: 0
 			},
@@ -80,7 +107,7 @@ export default {
 				type: String,
 				default: ''
 			},
-			distance:  {
+			distance: {
 				type: Number,
 				default: 0
 			},
@@ -96,5 +123,5 @@ export default {
 		}
 
 	}
-}
+};
 </script>

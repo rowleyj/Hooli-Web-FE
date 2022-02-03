@@ -3,7 +3,7 @@ export const state = () => ({
 });
 
 export const mutations = {
-	SET_ACCESS_TOKEN (state, token) {
+	SET_ACCESS_TOKEN(state, token) {
 		state.accessToken = token;
 	}
 };
@@ -15,10 +15,10 @@ export const getters = {
 			Authorization: `Bearer ${state.accessToken}`
 		}
 	})
-}
+};
 
 export const actions = {
-	logout ({ commit }) {
+	logout({ commit }) {
 		commit('SET_ACCESS_TOKEN', null);
 		commit('user/CLEAR_USER');
 		commit('routes/CLEAR_ROUTES');

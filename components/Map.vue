@@ -8,6 +8,7 @@
 			:zoom="zoom"
 			:center="[centerLat, centerLong]">
 			<l-draw-toolbar
+				v-if="drawing"
 				position="topright"/>
 
 			<l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
@@ -29,10 +30,10 @@ import 'leaflet/dist/leaflet.css';
 
 export default {
 	computed: {
-		mapStyle(){
-			let height = typeof this.height === 'string' ? this.height : `${this.height}px`;
-			let width = typeof this.width === 'string' ? this.width : `${this.width}px`;
-			return `height: ${height}; width: ${width}; z-index: 1`
+		mapStyle() {
+			const height = typeof this.height === 'string' ? this.height : `${this.height}px`;
+			const width = typeof this.width === 'string' ? this.width : `${this.width}px`;
+			return `height: ${height}; width: ${width}; z-index: 1`;
 		}
 	},
 	components: {
@@ -48,7 +49,7 @@ export default {
 	},
 	props: {
 		height: {
-			type: [Number,String],
+			type: [Number, String],
 			default: 350
 		},
 		width: {
@@ -72,7 +73,7 @@ export default {
 			default: false
 		}
 	}
-}
+};
 </script>
 
 <style>

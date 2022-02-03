@@ -1,25 +1,27 @@
 module.exports = {
-	"env": {
-		"browser": true,
-		"es6": true,
-		"node": true
+	env: {
+		browser: true,
+		es6: true,
+		node: true
 	},
-	"extends": [
+	extends: [
 		"plugin:vue/essential",
+		"airbnb-base"
 	],
-	"globals": {
-		"Atomics": "readonly",
-		"SharedArrayBuffer": "readonly"
+	globals: {
+		Atomics: "readonly",
+		SharedArrayBuffer: "readonly"
 	},
-	"parserOptions": {
-		"ecmaVersion": 11,
-		"sourceType": "module"
+	parserOptions: {
+		ecmaVersion: 11,
+		sourceType: "module"
 	},
-	"plugins": [
+	plugins: [
 		"vue"
 	],
-	"rules": {
-		"quotes": 0,
+	rules: {
+		quotes: 0,
+		"import/no-unresolved": 0,
 		"max-len": 0,
 		"object-shorthand": 0,
 		"comma-dangle": 0,
@@ -40,8 +42,8 @@ module.exports = {
 		"no-redeclare": 0,
 		"global-require": 0,
 		"linebreak-style": 0,
-		"indent": ["error", "tab"],
-		"no-tabs": 0,//["error", { allowIndentationTabs: true }],
+		indent: ["error", "tab"],
+		"no-tabs": 0, // ["error", { allowIndentationTabs: true }],
 		"no-trailing-spaces": 1,
 
 		// vue
@@ -51,10 +53,10 @@ module.exports = {
 		// "vue/html-quotes": ["error", "double"],
 		"vue/no-unused-vars": "error",
 		"vue/max-attributes-per-line": ["error", {
-			"singleline": 1,
-			"multiline": {
-				"max": 1,
-				"allowFirstLine": false
+			singleline: 1,
+			multiline: {
+				max: 1,
+				allowFirstLine: false
 			}
 		}],
 		"vue/name-property-casing": ["error", "PascalCase"],
@@ -65,7 +67,7 @@ module.exports = {
 
 		// note that we use alphabetical order since it is way easier to debug
 		"vue/order-in-components": ["error", {
-			"order": [
+			order: [
 				"computed",
 				["components", "directives", "filters"],
 				["delimiters", "comments"],

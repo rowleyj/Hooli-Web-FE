@@ -31,7 +31,9 @@
 				<v-text-field
 					label="Title"
 					v-model="title"></v-text-field>
-				<v-textarea label="Description"></v-textarea>
+				<v-textarea
+					label="Description"
+					v-model="description"></v-textarea>
 				<v-file-input
 					v-model="rideFile"
 					label="Ride File"
@@ -68,6 +70,7 @@ export default {
 			dialog: false,
 			rideFile: null,
 			title: '',
+			description: '',
 			processing: false
 		}
 	},
@@ -115,27 +118,24 @@ export default {
 		},
 		/**
 		 * Create a users activity, upload files to server
+		 * @param {string} videoUrl - the url of the uploaded video
 		 */
 		async createActivity(videoUrl){
 			try {
-				// if(!this.rideFile) throw Error('Missing GPS file')
-
-				// const formData = new FormData();
-				// formData.append('ride', this.rideFile);
-				// formData.append('title', this.title);
-				// formData.append('videoUrl', videoUrl)
 				const body = {
 					ride: {
 						...await this.processRideFile()
 					},
 					title: this.title,
-					videoUrl: videoUrl
+					videoUrl: videoUrl,
+					description: this.description
 				}
-
 
 				const {data, status} = await this.$axios.post('/ride', body, this.axiosConfig);
 				if(status == 201){
 					console.log(data);
+					this.$store.commit('activities/ADD_RIDE', data);
+					return data;
 				}else{
 					throw Error('unable to add video');
 				}
@@ -144,7 +144,8 @@ export default {
 			}
 		},
 		/**
-		 * Uploads the video - NEED to associate with ride
+		 * Uploads the video
+		 * @returns {object} {url: 'path to video', ...}
 		 */
 		async uploadVideo(){
 			const formData = new FormData();
@@ -155,7 +156,6 @@ export default {
 				axiosConfig: this.axiosConfig,
 				formData
 			});
-			console.log('video uploaded?', uploaded);
 
 			return uploaded;
 		}
