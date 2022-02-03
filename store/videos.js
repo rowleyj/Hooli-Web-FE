@@ -30,10 +30,10 @@ export const actions = {
 		})
 	},
 	async uploadVideo ({commit}, {axiosConfig, formData}){
-		const {data, status} = await this.$axios.post('/video', formData, this.axiosConfig);
+		const {data, status} = await this.$axios.post('/video', formData, axiosConfig);
 		if(status == 201){
-			commit('videos/ADD_VIDEO', data);
-			return video;
+			commit('ADD_VIDEO', data);
+			return data;
 		}else{
 			throw Error('unable to add video');
 		}

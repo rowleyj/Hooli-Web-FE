@@ -83,6 +83,21 @@ export default {
 			this.videoFile = newVideoFile;
 		},
 		/**
+		 * Process ridefile
+		 */
+		async processRideFile(){
+			if(!this.rideFile) throw Error('No ride file!');
+			return this.fileToJSON(this.rideFile);
+		},
+		async fileToJSON(file) {
+			return new Promise((resolve, reject) => {
+				const fileReader = new FileReader()
+				fileReader.onload = event => resolve(JSON.parse(event.target.result))
+				fileReader.onerror = error => reject(error)
+				fileReader.readAsText(file)
+			})
+		},
+		/**
 		 * Uploades video, then uploads activity
 		 */
 		async processActivity(){
@@ -103,13 +118,22 @@ export default {
 		 */
 		async createActivity(videoUrl){
 			try {
-				if(!this.rideFile) throw Error('Missing GPS file')
+				// if(!this.rideFile) throw Error('Missing GPS file')
 
-				const formData = new FormData();
-				formData.append('ride', this.rideFile);
-				formData.append('title', this.title);
-				formData.append('videoUrl', videoUrl)
-				const {data, status} = await this.$axios.post('/ride', formData, this.axiosConfig);
+				// const formData = new FormData();
+				// formData.append('ride', this.rideFile);
+				// formData.append('title', this.title);
+				// formData.append('videoUrl', videoUrl)
+				const body = {
+					ride: {
+						...await this.processRideFile()
+					},
+					title: this.title,
+					videoUrl: videoUrl
+				}
+
+
+				const {data, status} = await this.$axios.post('/ride', body, this.axiosConfig);
 				if(status == 201){
 					console.log(data);
 				}else{
@@ -132,6 +156,8 @@ export default {
 				formData
 			});
 			console.log('video uploaded?', uploaded);
+
+			return uploaded;
 		}
 	},
 	props: {
