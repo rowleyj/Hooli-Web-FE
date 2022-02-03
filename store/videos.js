@@ -34,7 +34,7 @@ export const actions = {
 		const {data, status} = await this.$axios.post('/video', formData, this.axiosConfig);
 		if(status == 201){
 			commit('videos/ADD_VIDEO', data);
-			return true;
+			return video;
 		}else{
 			throw Error('unable to add video');
 		}

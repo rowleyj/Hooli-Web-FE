@@ -43,8 +43,10 @@
 			</v-card-text>
 			<submit-buttons
 				submit-text="Create Activity"
-				@submit="createActivity()"
+				@submit="processActivity()"
 				@close="closeDialog"
+				:loading="processing"
+				:disabled="processing"
 			/>
 		</v-card>
 	</v-dialog>
@@ -65,7 +67,8 @@ export default {
 		return {
 			dialog: false,
 			rideFile: null,
-			title: ''
+			title: '',
+			processing: false
 		}
 	},
 	methods: {
@@ -80,15 +83,32 @@ export default {
 			this.videoFile = newVideoFile;
 		},
 		/**
+		 * Uploades video, then uploads activity
+		 */
+		async processActivity(){
+			try {
+				this.processing = true;
+				let { url } = await this.uploadVideo();
+				let activity = await this.createActivity(url);
+				this.processing = false;
+				if(activity) this.closeDialog()
+				else alert('error');
+			} catch (error) {
+				console.error(error);
+				this.processing = false;
+			}
+		},
+		/**
 		 * Create a users activity, upload files to server
 		 */
-		async createActivity(){
+		async createActivity(videoUrl){
 			try {
 				if(!this.rideFile) throw Error('Missing GPS file')
 
 				const formData = new FormData();
 				formData.append('ride', this.rideFile);
 				formData.append('title', this.title);
+				formData.append('videoUrl', videoUrl)
 				const {data, status} = await this.$axios.post('/ride', formData, this.axiosConfig);
 				if(status == 201){
 					console.log(data);
@@ -102,12 +122,12 @@ export default {
 		/**
 		 * Uploads the video - NEED to associate with ride
 		 */
-		uploadVideo(){
+		async uploadVideo(){
 			const formData = new FormData();
 			formData.append("video", this.videoFile);
 			formData.append("title", this.title);
 
-			let uploaded = this.$store.dispatch('videos/uploadVideo', {
+			let uploaded = await this.$store.dispatch('videos/uploadVideo', {
 				axiosConfig: this.axiosConfig,
 				formData
 			});
