@@ -102,7 +102,6 @@
 									v-for="(closePass, index) in closePasses"
 									:key="`closePass${index}`">
 									<l-marker
-
 										:lat-lng="[closePass.lat, closePass.long]"></l-marker>
 								</div>
 

@@ -23,8 +23,7 @@ export const getters = {
 
 export const actions = {
 	async fetchVideos ({ commit }, axiosConfig) {
-		const { data } = await this.$axios.get('/video', axiosConfig)
-		const videos = data.data;
+		const { data: videos } = await this.$axios.get('/video', axiosConfig)
 		console.log('videos', videos);
 		videos.forEach(video => {
 			commit('ADD_VIDEO', video);
