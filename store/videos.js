@@ -29,5 +29,14 @@ export const actions = {
 		videos.forEach(video => {
 			commit('ADD_VIDEO', video);
 		})
+	},
+	async uploadVideo ({commit}, {axiosConfig, formData}){
+		const {data, status} = await this.$axios.post('/video', formData, this.axiosConfig);
+		if(status == 201){
+			commit('videos/ADD_VIDEO', data);
+			return true;
+		}else{
+			throw Error('unable to add video');
+		}
 	}
 };

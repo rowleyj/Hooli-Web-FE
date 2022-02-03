@@ -33,18 +33,16 @@
 					v-model="title"></v-text-field>
 				<v-textarea label="Description"></v-textarea>
 				<v-file-input
-					v-model="gpxFile"
-					@change="convertGPXToGeoJSON"
+					v-model="rideFile"
 					label="Ride File"
 					prepend-icon="mdi-bicycle"
-					hint="We use your data to calculate speed, calories burned, and show your route"></v-file-input>
-				<v-file-input
-					label="Video"
-					prepend-icon="mdi-video"></v-file-input>
+					hint="We use your data to calculate speed, calories burned, and show your route"
+					accept="application/json"></v-file-input>
+				<video-input
+					@change="updateVideo"/>
 			</v-card-text>
 			<submit-buttons
 				submit-text="Create Activity"
-				:disabled="convertingFile"
 				@submit="createActivity()"
 				@close="closeDialog"
 			/>
@@ -53,8 +51,8 @@
 </template>
 
 <script>
-const { default: SubmitButtons }=require("~/components/forms/SubmitButtons.vue")
-import { gpx } from '@tmcw/togeojson';
+import SubmitButtons from "@/components/forms/SubmitButtons.vue";
+import VideoInput from '@/components/dashboard/videos/VideoInput.vue';
 
 export default {
 	computed: {
@@ -62,13 +60,11 @@ export default {
 			return this.$store.getters['getAxiosConfig'];
 		}
 	},
-	components: { SubmitButtons },
+	components: { SubmitButtons, VideoInput },
 	data(){
 		return {
 			dialog: false,
-			gpxFile: null,
-			geoJSON: null,
-			convertingFile: false,
+			rideFile: null,
 			title: ''
 		}
 	},
@@ -76,43 +72,46 @@ export default {
 		closeDialog(){
 			this.dialog = false;
 		},
-		async convertGPXToGeoJSON(){
-			try {
-				this.convertingFile = true;
-				const text = await this.gpxFile.text()
-				const dom = new DOMParser().parseFromString(text, "text/xml");
-				const geoJSON = this.$_.get(gpx(dom), 'features[0].geometry.coordinates');
-				// tested file also had elevation but not necessary for us right now
-				if(geoJSON) this.geoJSON = geoJSON.map(val => [val[1], val[0]]);
-				this.convertingFile = false;
-			} catch (error) {
-				this.convertingFile = false;
-				console.error(error);
-			}
+		/**
+		 * Handles child component video file change
+		 */
+		updateVideo(newVideoFile){
+			console.log('updating video', newVideoFile)
+			this.videoFile = newVideoFile;
 		},
 		/**
 		 * Create a users activity, upload files to server
 		 */
 		async createActivity(){
 			try {
-				// const formData = new FormData();
-				// // formData.append("ride", this.gpxFile);
-				// formData.append('geoJSON', this.geoJSON);
-				// formData.append("title", this.title);
-				if(!this.geoJSON) throw Error('Missing GPS file')
-				const {data, status} = await this.$axios.post('/ride', {
-					title: this.title,
-					geoJSON: this.geoJSON
-				}, this.axiosConfig);
+				if(!this.rideFile) throw Error('Missing GPS file')
+
+				const formData = new FormData();
+				formData.append('ride', this.rideFile);
+				formData.append('title', this.title);
+				const {data, status} = await this.$axios.post('/ride', formData, this.axiosConfig);
 				if(status == 201){
 					console.log(data);
-					// this.closeDialog()
 				}else{
 					throw Error('unable to add video');
 				}
 			} catch (error) {
 				console.log(error);
 			}
+		},
+		/**
+		 * Uploads the video - NEED to associate with ride
+		 */
+		uploadVideo(){
+			const formData = new FormData();
+			formData.append("video", this.videoFile);
+			formData.append("title", this.title);
+
+			let uploaded = this.$store.dispatch('videos/uploadVideo', {
+				axiosConfig: this.axiosConfig,
+				formData
+			});
+			console.log('video uploaded?', uploaded);
 		}
 	},
 	props: {

@@ -27,33 +27,15 @@
 				</v-btn>
 			</v-card-title>
 			<v-divider class="my-2"></v-divider>
-			<v-row
-				v-if="videoUrl != null"
-				no-gutters>
-				<v-col
-					cols="12"
-				>
-					<!-- Video -->
-					<video
-						width="100%"
-						style="max-height: 300px;"
-						id="myVideo"
-						controls>
-						<source :src="videoUrl" /> Your browser does not support video.
-					</video>
-				</v-col>
-			</v-row>
 			<v-card-text>
-				<v-file-input
-					v-model="videoFile"
-					@change="previewVideo"
-					label="Video"
-					prepend-icon="mdi-video"></v-file-input>
 				<v-text-field
 					v-model="title"
 					label="Title">
 
 				</v-text-field>
+				<video-input
+					@change="updateVideo"
+				/>
 			</v-card-text>
 			<submit-buttons
 				submit-text="Upload Video"
@@ -65,7 +47,8 @@
 </template>
 
 <script>
-const { default: SubmitButtons }=require("~/components/forms/SubmitButtons.vue")
+import VideoInput from './VideoInput.vue';
+import SubmitButtons from '../../forms/SubmitButtons.vue'
 
 export default {
 	computed: {
@@ -76,18 +59,25 @@ export default {
 			return this.$store.getters['getAxiosConfig'];
 		}
 	},
-	components: { SubmitButtons },
+	components: {
+		SubmitButtons,
+		VideoInput },
 	data(){
 		return {
 			dialog: false,
 			videoFile: null,
-			videoUrl: null,
 			title: ''
 		}
 	},
 	methods: {
 		closeDialog(){
 			this.dialog = false;
+		},
+		/**
+		 * Handles child component video file change
+		 */
+		updateVideo(newVideoFile){
+			this.videoFile = newVideoFile;
 		},
 		/**
 		 * Updates the preview video based on the input video (to upload)
@@ -111,17 +101,16 @@ export default {
 				formData.append("video", this.videoFile);
 				formData.append("title", this.title);
 
-				const {data, status} = await this.$axios.post('/video', formData, this.axiosConfig);
-				if(status == 201){
-					this.$store.commit('videos/ADD_VIDEO', data);
-					this.closeDialog()
-				}else{
-					throw Error('unable to add video');
-				}
+				let uploaded = this.$store.dispatch('videos/uploadVideo', {
+					axiosConfig: this.axiosConfig,
+					formData
+				});
+
+				if(uploaded) this.closeDialog();
+				else alert('unable to upload!');
 			} catch (error) {
 				console.log(error);
 			}
-
 		}
 	},
 	props: {
