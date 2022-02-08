@@ -81,24 +81,24 @@ export default {
 	data() {
 		return {
 			focus: ''
-		}
+		};
 	},
 	methods: {
-		prev () {
-			console.log(this.$refs)
-			this.$refs.calendar.prev()
+		prev() {
+			console.log(this.$refs);
+			this.$refs.calendar.prev();
 		},
-		next () {
-			this.$refs.calendar.next()
+		next() {
+			this.$refs.calendar.next();
 		},
-		setToday () {
-			this.focus = ''
+		setToday() {
+			this.focus = '';
 		},
-		updateRange ({start,end}) {
+		updateRange({ start, end }) {
 			console.log('updating range');
 		}
 	}
-}
+};
 </script>
 
 <style>

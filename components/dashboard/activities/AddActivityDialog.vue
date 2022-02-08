@@ -61,55 +61,55 @@ import VideoInput from '@/components/dashboard/videos/VideoInput.vue';
 export default {
 	computed: {
 		axiosConfig() {
-			return this.$store.getters['getAxiosConfig'];
+			return this.$store.getters.getAxiosConfig;
 		}
 	},
 	components: { SubmitButtons, VideoInput },
-	data(){
+	data() {
 		return {
 			dialog: false,
 			rideFile: null,
 			title: '',
 			description: '',
 			processing: false
-		}
+		};
 	},
 	methods: {
-		closeDialog(){
+		closeDialog() {
 			this.dialog = false;
 		},
 		/**
 		 * Handles child component video file change
 		 */
-		updateVideo(newVideoFile){
-			console.log('updating video', newVideoFile)
+		updateVideo(newVideoFile) {
+			console.log('updating video', newVideoFile);
 			this.videoFile = newVideoFile;
 		},
 		/**
 		 * Process ridefile
 		 */
-		async processRideFile(){
-			if(!this.rideFile) throw Error('No ride file!');
+		async processRideFile() {
+			if (!this.rideFile) throw Error('No ride file!');
 			return this.fileToJSON(this.rideFile);
 		},
 		async fileToJSON(file) {
 			return new Promise((resolve, reject) => {
-				const fileReader = new FileReader()
-				fileReader.onload = event => resolve(JSON.parse(event.target.result))
-				fileReader.onerror = error => reject(error)
-				fileReader.readAsText(file)
-			})
+				const fileReader = new FileReader();
+				fileReader.onload = event => resolve(JSON.parse(event.target.result));
+				fileReader.onerror = error => reject(error);
+				fileReader.readAsText(file);
+			});
 		},
 		/**
 		 * Uploades video, then uploads activity
 		 */
-		async processActivity(){
+		async processActivity() {
 			try {
 				this.processing = true;
-				let { url } = await this.uploadVideo();
-				let activity = await this.createActivity(url);
+				const { url } = await this.uploadVideo();
+				const activity = await this.createActivity(url);
 				this.processing = false;
-				if(activity) this.closeDialog()
+				if (activity) this.closeDialog();
 				else alert('error');
 			} catch (error) {
 				console.error(error);
@@ -120,7 +120,7 @@ export default {
 		 * Create a users activity, upload files to server
 		 * @param {string} videoUrl - the url of the uploaded video
 		 */
-		async createActivity(videoUrl){
+		async createActivity(videoUrl) {
 			try {
 				const body = {
 					ride: {
@@ -129,16 +129,15 @@ export default {
 					title: this.title,
 					videoUrl: videoUrl,
 					description: this.description
-				}
+				};
 
-				const {data, status} = await this.$axios.post('/ride', body, this.axiosConfig);
-				if(status == 201){
+				const { data, status } = await this.$axios.post('/ride', body, this.axiosConfig);
+				if (status === 201) {
 					console.log(data);
 					this.$store.commit('activities/ADD_RIDE', data);
 					return data;
-				}else{
-					throw Error('unable to add video');
 				}
+				throw Error('unable to add video');
 			} catch (error) {
 				console.log(error);
 			}
@@ -147,12 +146,12 @@ export default {
 		 * Uploads the video
 		 * @returns {object} {url: 'path to video', ...}
 		 */
-		async uploadVideo(){
+		async uploadVideo() {
 			const formData = new FormData();
 			formData.append("video", this.videoFile);
 			formData.append("title", this.title);
 
-			let uploaded = await this.$store.dispatch('videos/uploadVideo', {
+			const uploaded = await this.$store.dispatch('videos/uploadVideo', {
 				axiosConfig: this.axiosConfig,
 				formData
 			});
@@ -162,5 +161,5 @@ export default {
 	},
 	props: {
 	}
-}
+};
 </script>

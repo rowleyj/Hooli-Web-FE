@@ -120,14 +120,14 @@ import RouteMenu from './routes/RouteMenu.vue';
 
 export default {
 	computed: {
-		userId(){
+		userId() {
 			return this.$store.getters['user/getUserId'];
 		},
-		routes(){
+		routes() {
 			return this.$store.getters['routes/getRoutes'];
 		},
-		filteredRoutes(){
-			if(this.textFilter && this.routes){
+		filteredRoutes() {
+			if (this.textFilter && this.routes) {
 				return this.routes.filter(route => this.$_.get(route, 'name', '').includes(this.textFilter));
 			}
 			return this.routes;
@@ -170,13 +170,13 @@ export default {
 					long: -78
 				},
 			]
-		}
+		};
 	},
 	methods: {
 		/**
 		 * Select a route to show on the map
 		 */
-		selectRoute(route){
+		selectRoute(route) {
 			this.selectedRoute = route;
 			this.routeToShow.latlngs = route.geo.coordinates;
 			this.centerOnRouteStart(route.geo.coordinates);
@@ -185,48 +185,47 @@ export default {
 		 * Centers map on start of a route
 		 * @param {number[][]} coordinates = list of [lat, long]
 		 */
-		centerOnRouteStart(coordinates){
-			if(coordinates && coordinates.length){
-				const [lat,long] = coordinates[0]
-				Object.assign(this.center, {lat, long});
-			}else{
+		centerOnRouteStart(coordinates) {
+			if (coordinates && coordinates.length) {
+				const [lat, long] = coordinates[0];
+				Object.assign(this.center, { lat, long });
+			} else {
 				console.warn('No coordinates to center on');
 			}
 		},
 		/**
 		 * Sends request to save route
 		 */
-		async saveDrawnRoute(){
+		async saveDrawnRoute() {
 			try {
-				const axiosConfig = this.$store.getters['getAxiosConfig'];
-				const coords = Object.values(this.newRoute).map(coord => [coord.lat, coord.lng])
+				const axiosConfig = this.$store.getters.getAxiosConfig;
+				const coords = Object.values(this.newRoute).map(coord => [coord.lat, coord.lng]);
 				const payload = {
 					coords,
 					name: this.newRouteName,
 					user: this.userId,
 					custom: true
-				}
-				const {data, status} = await this.$axios.post('/route', payload, axiosConfig);
+				};
+				const { data, status } = await this.$axios.post('/route', payload, axiosConfig);
 				console.log(data, status);
-				if(data && status === 201){
+				if (data && status === 201) {
 					this.$store.commit('routes/ADD_ROUTE', data);
 					this.cancelDraw();
 				}
 			} catch (error) {
 				console.error(error);
 			}
-
 		},
 		/**
 		 * Registers a reference to the map so we can draw on it
 		 */
-		registerMap(mapRef){
-			this.mapRef = mapRef
+		registerMap(mapRef) {
+			this.mapRef = mapRef;
 		},
 		/**
 		 * Empty the new route object and cancel draw
 		 */
-		cancelDraw(){
+		cancelDraw() {
 			this.newRoute = {};
 			this.newRouteName = '';
 			this.drawingRoute = false;
@@ -234,20 +233,20 @@ export default {
 		/**
 		 * Enable a user to draw a route on the map, and save the lat/long in an id-keyed map
 		 */
-		drawRoute(){
+		drawRoute() {
 			this.drawingRoute = true;
 			this.mapRef.mapObject.on('draw:drawvertex', (e) => {
 				console.log(e);
-				const {target} = e;
+				const { target } = e;
 				// const {_layers: layers} = target;
-				const {layers} = e;
+				const { layers } = e;
 				// Object.values(layers).forEach(layer => console.log(layer.name));
 				// // console.log(layers);
-				const polyLayers = Object.values(layers._layers).filter(layer => layer._latlng && layer._latlng.lat)
+				const polyLayers = Object.values(layers._layers).filter(layer => layer._latlng && layer._latlng.lat);
 				console.log(polyLayers);
 				polyLayers.forEach(layer => {
-					this.newRoute[layer._leaflet_id] = {...layer._latlng}
-				})
+					this.newRoute[layer._leaflet_id] = { ...layer._latlng };
+				});
 			});
 			// 	this.mapRef.mapObject.on('draw:created', (e) => {
 			// 	})
@@ -261,7 +260,7 @@ export default {
 			// 	})
 		}
 	}
-}
+};
 /**
  draw drawvertex
 Object { layers: {…}, type: "draw:drawvertex", target: {…}, sourceTarget: {…} }
@@ -277,11 +276,9 @@ type: "draw:drawvertex"
 <prototype>: Object { … }
 Routes.vue:117
 
-
  */
 </script>
 
 <style>
 
 </style>
-

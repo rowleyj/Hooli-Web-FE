@@ -79,8 +79,8 @@ export default {
 	},
 	methods: {
 		viewActivity() {
-			if (this.ride && this.ride.id) {
-				this.$router.push(`/activity/${this.ride.id}`);
+			if (this.ride && this.ride._id) {
+				this.$router.push(`/activity/${this.ride._id}`);
 			} else {
 				console.error('Unable to find ride');
 			}

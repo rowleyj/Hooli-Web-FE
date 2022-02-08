@@ -19,7 +19,7 @@ export const mutations = {
 
 export const getters = {
 	getRides: state => state.rides,
-	getRideById: state => (id) => state.rides.find((ride) => ride.id === id),
+	getRideById: state => (id) => state.rides.find((ride) => ride._id === id),
 };
 
 export const actions = {
