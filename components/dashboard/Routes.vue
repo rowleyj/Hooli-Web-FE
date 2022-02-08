@@ -14,7 +14,7 @@
 						dark>Created Routes
 						<v-spacer></v-spacer>
 						<v-btn icon>
-							<v-icon @click="showFilter = true">mdi-filter</v-icon>
+							<v-icon @click="showFilter = !showFilter">mdi-filter</v-icon>
 						</v-btn>
 						<div v-if="!drawingRoute">
 							<v-btn
