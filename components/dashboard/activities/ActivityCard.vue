@@ -22,7 +22,13 @@
 			<Map
 				:centerLat="centerLat"
 				:centerLong="centerLong"
-			/>
+			>
+				<template v-slot:route>
+					<l-polyline
+						:lat-lngs="routeGeo"
+					> </l-polyline>
+				</template>
+			</Map>
 		</v-row>
 		<v-row>
 			<v-container>
@@ -44,6 +50,7 @@
 </template>
 
 <script>
+import { LPolyline } from 'vue2-leaflet';
 import Distance from '~/components/Distance.vue';
 
 export default {
@@ -72,10 +79,14 @@ export default {
 				return this.$store.getters['routes/getRouteById'](this.ride.routeId);
 			}
 			return null;
-		}
+		},
+		routeGeo() {
+			return this.$_.get(this.route, 'geo.coordinates', null);
+		},
 	},
 	components: {
 		Distance,
+		LPolyline
 	},
 	methods: {
 		viewActivity() {

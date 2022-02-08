@@ -25,6 +25,8 @@
 					<Map
 						:height="600"
 						width="100%"
+						:centerLat="centerLat"
+						:centerLong="centerLong"
 						:zoom="12">
 						<template v-slot:route>
 							<l-polyline
@@ -69,6 +71,7 @@
 </template>
 
 <script>
+import { LPolyline, LMarker } from 'vue2-leaflet';
 import SpeedChart from '~/components/charts/SpeedChart.vue';
 import VideoScroller from '~/components/dashboard/videos/VideoScroller.vue';
 import Map from '~/components/Map.vue';
@@ -105,11 +108,21 @@ export default {
 			}
 			return null;
 		},
+		center() {
+			return this.$_.get(this.route, 'geo.coordinates[0]', [50, 50]);
+		},
+		centerLat() {
+			return this.center[0];
+		},
+		centerLong() {
+			return this.center[1];
+		},
 	},
 	components: {
 		Map,
 		SpeedChart,
-		VideoScroller
+		VideoScroller,
+		LPolyline
 	},
 	data() {
 		return {

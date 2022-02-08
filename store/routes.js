@@ -8,10 +8,7 @@ export const state = () => ({
 export const mutations = {
 	ADD_ROUTE(state, route) {
 		state.routes.push(route);
-
-		const obj = {};
-		obj[route._id] = route;
-		Object.assign(state.routeMap, obj);
+		Vue.set(state.routeMap, route._id, route);
 	},
 	CLEAR_ROUTES(state) {
 		state.routes = [];
@@ -30,6 +27,7 @@ export const mutations = {
 export const getters = {
 	getRoutes: state => state.routes,
 	getRouteById: (state) => (id) => state.routeMap[id]
+
 };
 
 export const actions = {
