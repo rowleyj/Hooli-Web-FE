@@ -41,7 +41,7 @@ export default {
 			return this.$store.getters.getAxiosConfig;
 		},
 		video() {
-			if (state === 0) return this.videoUrl;
+			if (this.state === 0) return this.videoUrl;
 			return this.currentClosePassUrl;
 		}
 	},
