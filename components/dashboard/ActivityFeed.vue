@@ -3,6 +3,7 @@
 		<activity-bar />
 		<v-row
 			justify="space-between"
+			class="px-2"
 		>
 			<v-col
 				cols="12"

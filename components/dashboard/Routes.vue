@@ -8,30 +8,11 @@
 					width="100%"
 					class="mx-auto"
 				>
-					<v-toolbar
-						color="primary"
-						dense
-						dark>Created Routes
-						<v-spacer></v-spacer>
-						<v-btn icon>
-							<v-icon @click="showFilter = !showFilter">mdi-filter</v-icon>
-						</v-btn>
-						<div v-if="!drawingRoute">
-							<v-btn
-								icon
-								@click="drawRoute()">
-								<v-icon>
-									mdi-plus</v-icon>
-							</v-btn>
-						</div>
-						<div v-else>
-							<v-btn
-								icon
-								@click="cancelDraw()">
-								<v-icon>mdi-cancel</v-icon>
-							</v-btn>
-						</div>
-					</v-toolbar>
+					<route-tool-menu-toolbar
+						@toggle-filter="showFilter = !showFilter"
+						@draw="drawRoute()"
+						@stop-draw="cancelDraw()"
+					/>
 					<v-toolbar
 						dense
 						color="accent"
@@ -57,9 +38,13 @@
 						</v-list-item>
 						<v-list-item-group
 							v-model="selected"
+							height="75vh"
 						>
 							<v-list-item
-								v-for="route in filteredRoutes"
+								v-for="
+									route
+										in
+											filteredRoutes"
 								:key="route._id"
 								@click="selectRoute(route)">
 								<v-row class="px-4">

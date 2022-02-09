@@ -4,13 +4,19 @@
 		width="600">
 		<template v-slot:activator="{ on, attrs }">
 			<v-btn
-				small
+				x-small
 				v-on="on"
-				v-bind="attrs"
+				fab
 				class="mr-2"
+				v-bind="
+					attrs"
 				color="primary">
-				<v-icon left>mdi-plus</v-icon>
-				Add Activity
+				<v-icon>mdi-plus</v-icon>
+				<span
+					v-if="!$vuetify.breakpoint.mobile"
+					class="ml-2">
+					Add Activity
+				</span>
 			</v-btn>
 		</template>
 		<v-card>

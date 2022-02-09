@@ -4,7 +4,9 @@
 		color="accent"
 		height="54">
 		<v-row align="center">
-			<v-col cols="4">
+			<v-col
+				cols="10"
+				md="4">
 				<v-text-field
 					label="Search activities..."
 					hide-details
@@ -21,18 +23,19 @@
 </template>
 
 <script>
-import AddActivityDialog from './AddActivityDialog.vue'
+import AddActivityDialog from './AddActivityDialog.vue';
+
 export default {
 	components: { AddActivityDialog },
 	methods: {
 		/**
 		 * Search and filter the users activities
 		 */
-		search(){
+		search() {
 
 		}
 	}
-}
+};
 </script>
 
 <style>

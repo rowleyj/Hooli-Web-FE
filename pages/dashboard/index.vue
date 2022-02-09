@@ -1,14 +1,13 @@
 <template>
 	<v-container>
 		<v-card>
-
 			<v-toolbar
+				v-if="!$vuetify.breakpoint.mobile"
 				color="primary"
 				dark>
 				<v-toolbar-title class="pr-4">
 					<div>
 						Dashboard
-
 					</div>
 				</v-toolbar-title>
 				<v-divider
@@ -33,6 +32,28 @@
 					@click="settingsDialog = true">
 					<v-icon>mdi-cog</v-icon>
 				</v-btn>
+			</v-toolbar>
+			<!-- mobile toolbar -->
+			<v-toolbar
+				v-else
+				color="primary"
+				dark>
+				<v-tabs
+					v-model="tab"
+					show-arrows
+				>
+					<v-tabs-slider color="accent"></v-tabs-slider>
+
+					<v-tab
+						v-for="item in tabs"
+						:key="item.name"
+					>
+						<v-icon
+							left
+							x-small>{{item.icon}}</v-icon>
+						{{ item.name }}
+					</v-tab>
+				</v-tabs>
 			</v-toolbar>
 			<v-tabs-items v-model="tab">
 				<v-tab-item>
@@ -83,18 +104,18 @@
 </template>
 
 <script>
-import ActivityFeed from '@/components/dashboard/ActivityFeed.vue'
-import Stats from '~/components/dashboard/Stats.vue'
-import VideoFeed from '@/components/dashboard/VideoFeed.vue'
-import Routes from '@/components/dashboard/Routes.vue'
+import ActivityFeed from '@/components/dashboard/ActivityFeed.vue';
+import Stats from '~/components/dashboard/Stats.vue';
+import VideoFeed from '@/components/dashboard/VideoFeed.vue';
+import Routes from '@/components/dashboard/Routes.vue';
 
 export default {
 	computed: {
-		accessToken(){
-			return this.$store.getters['getAccessToken'];
+		accessToken() {
+			return this.$store.getters.getAccessToken;
 		},
-		axiosConfig(){
-			return this.$store.getters['getAxiosConfig']
+		axiosConfig() {
+			return this.$store.getters.getAxiosConfig;
 		}
 	},
 	components: {
@@ -108,29 +129,29 @@ export default {
 		return {
 			tab: 0,
 			tabs: [
-				{name: 'Activities', icon: 'mdi-bike'},
-				{name: 'Routes', icon: 'mdi-map-marker-account'},
-				{name: 'Stats', icon: 'mdi-chart-timeline-variant'},
-				{name: 'Videos', icon: 'mdi-video'},
+				{ name: 'Activities', icon: 'mdi-bike' },
+				{ name: 'Routes', icon: 'mdi-map-marker-account' },
+				{ name: 'Stats', icon: 'mdi-chart-timeline-variant' },
+				{ name: 'Videos', icon: 'mdi-video' },
 			],
 			settingsDialog: false
-		}
+		};
 	},
 	methods: {
-		init(){
+		init() {
 
 		},
-		saveSettings () {
+		saveSettings() {
 			console.log('save settings');
 			this.settingsDialog = false;
 		}
 	},
 	watch: {
-		accessToken(newVal, oldVal){
-			if(newVal){
+		accessToken(newVal, oldVal) {
+			if (newVal) {
 				this.init();
 			}
 		}
 	}
-}
+};
 </script>

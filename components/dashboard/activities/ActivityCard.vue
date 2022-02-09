@@ -1,6 +1,8 @@
 <template>
 	<v-card
-		class="mx-8 mb-8 mt-4 pb-2"
+		class="mb-8 mt-4 pb-2"
+		max-height="65vh"
+		width="100vh"
 		@click="viewActivity"
 		hover>
 		<v-toolbar
@@ -22,6 +24,7 @@
 			<Map
 				:centerLat="centerLat"
 				:centerLong="centerLong"
+				:height="$vuetify.breakpoint.mobile ? '50vh' : '35vh'"
 			>
 				<template v-slot:route>
 					<l-polyline
@@ -31,19 +34,16 @@
 				</template>
 			</Map>
 		</v-row>
-		<v-row>
-			<v-container>
-				{{ride.description}}
-			</v-container>
-		</v-row>
 		<v-row
 			justify="center"
-			class="py-2 px-4">
-			<span class="mx-2">
-				<v-icon>mdi-car-arrow-right</v-icon>{{numberClosePasses}} close passes
+			class="py-2 px-2">
+			<span class="mr-2">
+				<v-icon
+					color="error">mdi-car-arrow-right</v-icon>{{numberClosePasses}} close passes
 			</span>
 			<span v-if="caloriesBurned">
-				<v-icon>mdi-fire</v-icon>{{caloriesBurned}} calories burned
+				<v-icon
+					color="warning">mdi-fire</v-icon>{{caloriesBurned}} calories burned
 			</span>
 		</v-row>
 
