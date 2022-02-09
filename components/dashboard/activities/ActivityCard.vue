@@ -25,6 +25,7 @@
 			>
 				<template v-slot:route>
 					<l-polyline
+						v-if="routeGeo"
 						:lat-lngs="routeGeo"
 					> </l-polyline>
 				</template>
