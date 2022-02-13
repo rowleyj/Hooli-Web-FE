@@ -32,6 +32,17 @@
 						:lat-lngs="routeGeo"
 					> </l-polyline>
 				</template>
+				<template v-slot:closepassmarkers>
+					<l-circle-marker
+						v-for="(closePass, idx) in closePasses"
+						:key="`closepassmarker${idx}`"
+						color="red"
+						:fill-opacity="1"
+						:radius="5"
+						name="closePass"
+						:lat-lng="closePass.geo.coords">
+					</l-circle-marker>
+				</template>
 			</Map>
 		</v-row>
 		<v-row
@@ -51,7 +62,7 @@
 </template>
 
 <script>
-import { LPolyline } from 'vue2-leaflet';
+import { LPolyline, LCircleMarker } from 'vue2-leaflet';
 import Distance from '~/components/Distance.vue';
 
 export default {
@@ -84,10 +95,15 @@ export default {
 		routeGeo() {
 			return this.$_.get(this.route, 'geo.coordinates', null);
 		},
+		closePasses() {
+			if (this.ride && this.ride.closePasses) return this.$store.getters['activities/getClosePasses'](this.ride.closePasses);
+			return [];
+		}
 	},
 	components: {
 		Distance,
-		LPolyline
+		LPolyline,
+		LCircleMarker
 	},
 	methods: {
 		viewActivity() {

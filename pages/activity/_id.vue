@@ -33,6 +33,17 @@
 								:lat-lngs="routeGeo"
 							> </l-polyline>
 						</template>
+						<template v-slot:closepassmarkers>
+							<l-circle-marker
+								v-for="(closePass, idx) in closePasses"
+								:key="`closepassmarker${idx}`"
+								color="red"
+								:fill-opacity="1"
+								:radius="5"
+								name="closePass"
+								:lat-lng="closePass.geo.coords">
+							</l-circle-marker>
+						</template>
 					</Map>
 				</v-col>
 				<v-col
@@ -71,7 +82,7 @@
 </template>
 
 <script>
-import { LPolyline, LMarker } from 'vue2-leaflet';
+import { LPolyline, LCircleMarker } from 'vue2-leaflet';
 import SpeedChart from '~/components/charts/SpeedChart.vue';
 import VideoScroller from '~/components/dashboard/videos/VideoScroller.vue';
 import Map from '~/components/Map.vue';
@@ -117,12 +128,17 @@ export default {
 		centerLong() {
 			return this.center[1];
 		},
+		closePasses() {
+			if (this.ride && this.ride.closePasses) return this.$store.getters['activities/getClosePasses'](this.ride.closePasses);
+			return [];
+		}
 	},
 	components: {
 		Map,
 		SpeedChart,
 		VideoScroller,
-		LPolyline
+		LPolyline,
+		LCircleMarker
 	},
 	data() {
 		return {
@@ -141,7 +157,7 @@ export default {
 					value: 'value',
 					text: 'Stat Value'
 				}
-			],
+			]
 		};
 	},
 	methods: {
@@ -179,6 +195,16 @@ export default {
 				}
 			});
 			return statsToShow;
+		},
+	},
+	watch: {
+		/**
+		 * Watch for ride to be updated/defined and repopulate closepass cache
+		 */
+		ride(updatedRide) {
+			if (updatedRide && updatedRide.closePasses) {
+				this.$store.dispatch('activities/fetchClosePasses', { closePassIds: updatedRide.closePasses });
+			}
 		}
 	}
 };

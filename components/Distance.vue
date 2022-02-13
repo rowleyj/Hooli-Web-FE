@@ -5,8 +5,8 @@
 <script>
 export default {
 	methods: {
-		toKm(distance){
-			return Number(distance/1000).toFixed(2)
+		toKm(distance) {
+			return Number(distance / 1000).toFixed(2);
 		}
 	},
 	props: {
@@ -15,5 +15,5 @@ export default {
 			default: 0
 		}
 	}
-}
+};
 </script>

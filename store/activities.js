@@ -1,5 +1,6 @@
 export const state = () => ({
-	rides: []
+	rides: [],
+	closePasses: {}
 });
 
 export const mutations = {
@@ -14,27 +15,54 @@ export const mutations = {
 		if (index > -1) {
 			state.rides.splice(index, 1);
 		}
+	},
+	ADD_CLOSEPASS(state, closepass) {
+		state.closePasses[closepass._id] = closepass;
+	},
+	CLEAR_CLOSEPASSES(state) {
+		state.closePasses = {};
 	}
 };
 
 export const getters = {
 	getRides: state => state.rides,
 	getRideById: state => (id) => state.rides.find((ride) => ride._id === id),
+	getClosePasses: state => (closePassIds) => {
+		const closePasses = [];
+		closePassIds.forEach(closePassId => {
+			if (state.closePasses[closePassId]) closePasses.push(state.closePasses[closePassId]);
+		});
+
+		return closePasses;
+	}
 };
 
 export const actions = {
 	async fetchRides({ commit }, axiosConfig) {
 		const { data } = await this.$axios.get('/ride', axiosConfig);
 		const rides = data;
-		console.log('rides', rides);
 		rides.forEach(ride => {
 			commit('ADD_RIDE', ride);
 		});
 	},
+	async fetchClosePasses({ commit, rootGetters }, { closePassIds }) {
+		const axiosConfig = rootGetters.getAxiosConfig;
+		const config = {
+			...axiosConfig,
+			params: {
+				_id: closePassIds
+			}
+		};
+		const { data } = await this.$axios.get('/closePass', config);
+		const closePasses = data;
+
+		closePasses.forEach(closepass => {
+			commit('ADD_CLOSEPASS', closepass);
+		});
+	},
 	async deleteRide({ commit, rootGetters }, id) {
 		const axiosConfig = rootGetters.getAxiosConfig;
-		const { status } = await this.$axios.delete(`/ride/${id}`, axiosConfig);
-		console.log(status);
+		await this.$axios.delete(`/ride/${id}`, axiosConfig);
 
 		commit('REMOVE_RIDE', id);
 	}
