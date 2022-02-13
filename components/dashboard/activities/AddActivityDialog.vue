@@ -4,16 +4,23 @@
 		width="600">
 		<template v-slot:activator="{ on, attrs }">
 			<v-btn
+				v-if="isMobile"
 				x-small
 				v-on="on"
 				fab
 				class="mr-2"
-				v-bind="
-					attrs"
+				v-bind="attrs"
+				color="primary">
+				<v-icon>mdi-plus</v-icon>
+			</v-btn>
+			<v-btn
+				v-else
+				v-on="on"
+				class="mr-2"
+				v-bind="attrs"
 				color="primary">
 				<v-icon>mdi-plus</v-icon>
 				<span
-					v-if="!$vuetify.breakpoint.mobile"
 					class="ml-2">
 					Add Activity
 				</span>
@@ -68,6 +75,9 @@ export default {
 	computed: {
 		axiosConfig() {
 			return this.$store.getters.getAxiosConfig;
+		},
+		isMobile() {
+			return this.$vuetify.breakpoint.mobile;
 		}
 	},
 	components: { SubmitButtons, VideoInput },

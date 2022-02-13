@@ -8,10 +8,11 @@
 					width="100%"
 					class="mx-auto"
 				>
-					<route-tool-menu-toolbar
+					<route-menu-tool-bar
 						@toggle-filter="showFilter = !showFilter"
 						@draw="drawRoute()"
 						@stop-draw="cancelDraw()"
+						:drawingRoute="drawingRoute"
 					/>
 					<v-toolbar
 						dense
@@ -102,6 +103,7 @@
 <script>
 import { LPolyline, LMarker } from 'vue2-leaflet';
 import RouteMenu from './routes/RouteMenu.vue';
+import RouteMenuToolBar from './routes/RouteToolMenuToolbar.vue';
 
 export default {
 	computed: {
@@ -121,7 +123,8 @@ export default {
 	components: {
 		LPolyline,
 		LMarker,
-		RouteMenu
+		RouteMenu,
+		RouteMenuToolBar
 	},
 	data() {
 		return {

@@ -37,6 +37,12 @@ export default {
 		stopDraw() {
 			this.$emit('stop-draw');
 		}
+	},
+	props: {
+		drawingRoute: {
+			type: Boolean,
+			default: false
+		}
 	}
 };
 </script>
