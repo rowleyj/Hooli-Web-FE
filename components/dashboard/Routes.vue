@@ -73,6 +73,18 @@
 					height="100%"
 					width="100%"
 					class="mx-auto pa-2">
+					<v-toolbar
+						color="primary"
+						dense>
+						<v-spacer></v-spacer>
+						<v-btn
+							@click="toggleHeatmap"
+							icon>
+							<v-icon color="secondary">
+								mdi-map-marker-path
+							</v-icon>
+						</v-btn>
+					</v-toolbar>
 					<v-row
 						justify="center">
 						<Map
@@ -229,47 +241,21 @@ export default {
 		drawRoute() {
 			this.drawingRoute = true;
 			this.mapRef.mapObject.on('draw:drawvertex', (e) => {
-				console.log(e);
-				const { target } = e;
-				// const {_layers: layers} = target;
 				const { layers } = e;
-				// Object.values(layers).forEach(layer => console.log(layer.name));
-				// // console.log(layers);
 				const polyLayers = Object.values(layers._layers).filter(layer => layer._latlng && layer._latlng.lat);
-				console.log(polyLayers);
 				polyLayers.forEach(layer => {
 					this.newRoute[layer._leaflet_id] = { ...layer._latlng };
 				});
 			});
-			// 	this.mapRef.mapObject.on('draw:created', (e) => {
-			// 	})
-			// 	this.mapRef.mapObject.on('draw:edited', (e) => {
-			// 	})
-			// 	this.mapRef.mapObject.on('draw:drawstop', (e) => {
-			// 	})
-			// 	this.mapRef.mapObject.on('draw:drawvertex', (e) => {
-			// 	})
-			// 	this.mapRef.mapObject.on('draw:editvertex', (e) => {
-			// 	})
+		},
+		/**
+		 * Toggles heatmap view
+		 */
+		toggleHeatmap() {
+			console.log('toggle heatmap');
 		}
 	}
 };
-/**
- draw drawvertex
-Object { layers: {…}, type: "draw:drawvertex", target: {…}, sourceTarget: {…} }
-
-layers: Object { _initHooksCalled: true, _leaflet_id: 176, _zoomAnimated: true, … }
-
-sourceTarget: Object { _sizeChanged: false, _leaflet_id: 2, _containerId: 3, … }
-
-target: Object { _sizeChanged: false, _leaflet_id: 2, _containerId: 3, … }
-
-type: "draw:drawvertex"
-
-<prototype>: Object { … }
-Routes.vue:117
-
- */
 </script>
 
 <style>
