@@ -1,5 +1,5 @@
 <template>
-	<v-container>
+	<v-container style="height: 80vh">
 		<v-row>
 			<v-col
 				cols="12"
@@ -7,6 +7,7 @@
 				<v-card
 					width="100%"
 					class="mx-auto"
+					height="100%"
 				>
 					<route-menu-tool-bar
 						@toggle-filter="showFilter = !showFilter"
@@ -24,7 +25,10 @@
 							append-icon="mdi-magnify"
 							v-model="textFilter"></v-text-field>
 					</v-toolbar>
-					<v-list>
+					<v-list
+						style="max-height: 600px"
+						class="overflow-y-auto"
+					>
 						<v-list-item v-if="drawingRoute">
 							<v-text-field
 								label="Route Name"
@@ -57,6 +61,7 @@
 						</v-list-item-group>
 
 					</v-list>
+
 				</v-card>
 
 			</v-col>
