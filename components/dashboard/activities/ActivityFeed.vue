@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import ActivityBar from './activities/ActivityBar.vue';
-import ActivityCard from './activities/ActivityCard.vue';
+import ActivityBar from './ActivityBar.vue';
+import ActivityCard from './ActivityCard.vue';
 
 export default {
 	computed: {

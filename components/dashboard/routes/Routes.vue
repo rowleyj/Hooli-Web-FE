@@ -46,10 +46,7 @@
 							height="75vh"
 						>
 							<v-list-item
-								v-for="
-									route
-										in
-											filteredRoutes"
+								v-for="route in filteredRoutes"
 								:key="route._id"
 								@click="selectRoute(route)">
 								<v-row class="px-4">
@@ -73,18 +70,9 @@
 					height="100%"
 					width="100%"
 					class="mx-auto pa-2">
-					<v-toolbar
-						color="primary"
-						dense>
-						<v-spacer></v-spacer>
-						<v-btn
-							@click="toggleHeatmap"
-							icon>
-							<v-icon color="secondary">
-								mdi-map-marker-path
-							</v-icon>
-						</v-btn>
-					</v-toolbar>
+					<map-toolbar
+						@toggle-heatmap="toggleHeatmap"
+					/>
 					<v-row
 						justify="center">
 						<Map
@@ -101,12 +89,12 @@
 									:color="routeToShow.color"> </l-polyline>
 							</template>
 							<template v-slot:closepassmarkers>
-								<div
+								<!-- <div
 									v-for="(closePass, index) in closePasses"
 									:key="`closePass${index}`">
 									<l-marker
 										:lat-lng="[closePass.lat, closePass.long]"></l-marker>
-								</div>
+								</div> -->
 
 							</template>
 						</Map>
@@ -118,9 +106,12 @@
 </template>
 
 <script>
+import L from 'leaflet';
 import { LPolyline, LMarker } from 'vue2-leaflet';
-import RouteMenu from './routes/RouteMenu.vue';
-import RouteMenuToolBar from './routes/RouteToolMenuToolbar.vue';
+import MapToolbar from './MapToolbar.vue';
+import RouteMenu from './RouteMenu.vue';
+import RouteMenuToolBar from './RouteToolMenuToolbar.vue';
+import 'leaflet.heat';
 
 export default {
 	computed: {
@@ -141,7 +132,8 @@ export default {
 		LPolyline,
 		LMarker,
 		RouteMenu,
-		RouteMenuToolBar
+		RouteMenuToolBar,
+		MapToolbar
 	},
 	data() {
 		return {
@@ -161,20 +153,7 @@ export default {
 				lat: 50,
 				long: 85
 			},
-			closePasses: [
-				{
-					lat: 44.37829479,
-					long: -79.7105945
-				},
-				{
-					lat: 44.5,
-					long: -78
-				},
-				{
-					lat: 43.5,
-					long: -78
-				},
-			]
+			heatmap: null,
 		};
 	},
 	methods: {
@@ -251,8 +230,22 @@ export default {
 		/**
 		 * Toggles heatmap view
 		 */
-		toggleHeatmap() {
-			console.log('toggle heatmap');
+		toggleHeatmap(on) {
+			if (on) {
+				this.generateHeatmap();
+			} else {
+				this.mapRef.mapObject.removeLayer(this.heatmap);
+			}
+		},
+		generateHeatmap() {
+			const routeGeos = this.routes.map(route => route.geo.coordinates);
+			const heatpoints = routeGeos.flat(1);
+			if (heatpoints && heatpoints.length) {
+				this.heatmap = L.heatLayer(heatpoints, { radius: 3, blur: 1 }).addTo(this.mapRef.mapObject);
+				this.centerOnRouteStart(heatpoints);
+			} else {
+				console.warn('No heatmap points found.');
+			}
 		}
 	}
 };
