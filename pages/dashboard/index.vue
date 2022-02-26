@@ -105,7 +105,7 @@
 
 <script>
 import ActivityFeed from '~/components/dashboard/activities/ActivityFeed.vue';
-import Stats from '~/components/dashboard/Stats.vue';
+import Stats from '~/components/dashboard/stats/StatFeed.vue';
 import VideoFeed from '~/components/dashboard/videos/VideoFeed.vue';
 import Routes from '~/components/dashboard/routes/Routes.vue';
 

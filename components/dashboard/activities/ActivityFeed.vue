@@ -1,5 +1,7 @@
 <template>
-	<v-container class="mt-0 pa-0">
+	<v-container
+		class="mt-0 pa-0"
+		style="height: 95vh;">
 		<activity-bar />
 		<v-row
 			justify="space-between"
