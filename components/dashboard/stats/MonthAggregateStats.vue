@@ -18,13 +18,12 @@
 		</v-row>
 		<v-row
 			no-gutters
-			v-if="weeks && weeks.length">
+			v-if="weeks && weeks.length && showDistancesByWeek">
 			<v-col
 				md="6"
 				cols="12"
 				class="text-center">
 				<vue-bar-graph
-					v-if="showDistancesByWeek"
 					:points="distancesByWeek"
 					:width="450"
 					:height="200"
@@ -40,7 +39,6 @@
 				cols="12"
 				class="text-center">
 				<vue-bar-graph
-					v-if="showDistancesByWeek"
 					:points="closePassesByWeek"
 					:width="450"
 					:height="200"
@@ -51,8 +49,42 @@
 				/>
 				<div>Close Passes</div>
 			</v-col>
+			<v-col
+				md="6"
+				cols="12"
+				class="text-center">
+				<vue-bar-graph
+					:points="caloriesByWeek"
+					:width="450"
+					:height="200"
+					show-x-axis
+					:custom-labels="weekStrings"
+					use-custom-labels
+					show-values
+				/>
+				<div>Calories</div>
+			</v-col>
+			<v-col
+				md="6"
+				cols="12"
+				class="text-center">
+				<vue-bar-graph
+					:points="movementTimeByWeek"
+					:width="450"
+					:height="200"
+					show-x-axis
+					:custom-labels="weekStrings"
+					use-custom-labels
+					show-values
+				/>
+				<div>Movement Time (minutes)</div>
+			</v-col>
 		</v-row>
-
+		<v-row
+			no-gutters
+			v-else>
+			No activities...
+		</v-row>
 	</v-card>
 </template>
 
@@ -98,6 +130,18 @@ export default {
 		closePassesByWeek() {
 			if (this.activityByWeek) {
 				return this.activityByWeek.map(listOfActivities => (listOfActivities.reduce((acc, val) => acc + val.closePasses.length, 0)));
+			}
+			return [];
+		},
+		caloriesByWeek() {
+			if (this.activityByWeek) {
+				return this.activityByWeek.map(listOfActivities => (listOfActivities.reduce((acc, val) => acc + Number(val.stats.caloriesBurned), 0).toFixed(2)));
+			}
+			return [];
+		},
+		movementTimeByWeek() {
+			if (this.activityByWeek) {
+				return this.activityByWeek.map(listOfActivities => (listOfActivities.reduce((acc, val) => acc + Number(val.stats.movementTimeMs), 0) / 60000).toFixed(2));
 			}
 			return [];
 		},

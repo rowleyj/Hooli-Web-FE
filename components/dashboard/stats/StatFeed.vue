@@ -1,6 +1,11 @@
 <template>
-	<v-container style="height: 95vh;">
-		<v-row class="my-2">
+	<v-container
+		style="height: 95vh"
+		class="overflow-y-auto"
+	>
+		<v-row
+			class="my-2"
+			no-gutters>
 			<v-card
 				width="100%"
 				flat
@@ -22,11 +27,6 @@
 						/>
 					</v-col>
 				</v-row>
-			</v-card>
-		</v-row>
-		<v-row class="my-4 mx-4 pt-4">
-			<v-card width="100%">
-				other stats
 			</v-card>
 		</v-row>
 	</v-container>
