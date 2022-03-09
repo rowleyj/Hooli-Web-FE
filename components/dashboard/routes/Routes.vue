@@ -80,7 +80,7 @@
 							:drawing="drawingRoute"
 							:height="600"
 							width="100%"
-							:zoom="12"
+							:zoom="zoom"
 							:centerLat="center.lat"
 							:centerLong="center.long">
 							<template v-slot:route>
@@ -149,6 +149,7 @@ export default {
 				color: 'black',
 				latlngs: []
 			},
+			zoom: 12,
 			center: {
 				lat: 50,
 				long: 85
@@ -163,18 +164,50 @@ export default {
 		selectRoute(route) {
 			this.selectedRoute = route;
 			this.routeToShow.latlngs = route.geo.coordinates;
-			this.centerOnRouteStart(route.geo.coordinates);
+			this.centerOnRoute(route.geo.coordinates);
 		},
 		/**
-		 * Centers map on start of a route
+		 * Centers on map using start, end and middle of route
 		 * @param {number[][]} coordinates = list of [lat, long]
 		 */
-		centerOnRouteStart(coordinates) {
+		centerOnRoute(coordinates) {
 			if (coordinates && coordinates.length) {
-				const [lat, long] = coordinates[0];
+				let lat; let long;
+				// simple average of start/mid/end
+				if (coordinates.length > 3) {
+					const start = coordinates[0];
+					const mid = coordinates[Math.floor(coordinates.length / 2)];
+					const end = coordinates[coordinates.length - 1];
+					lat = (start[0] + mid[0] + end[0]) / 3;
+					long = (start[1] + mid[1] + end[1]) / 3;
+
+					this.calculateZoom(start, mid, end);
+				} else {
+					const coord = coordinates[0];
+					[lat, long] = coord;
+				}
 				Object.assign(this.center, { lat, long });
 			} else {
 				console.warn('No coordinates to center on');
+			}
+		},
+		/**
+		 * Calculates and sets local map zoom based on start/mid/end coords
+		 */
+		calculateZoom(start, mid, end) {
+			const startLat = start[0];
+			const midLat = mid[0];
+			const endLat = end[0];
+
+			const startMidDiff = Math.abs(startLat - midLat);
+			const startEndDiff = Math.abs(startLat - endLat);
+			// Most bike rides are fairly small and will work fine with zoom = 12 or 10
+			if (startMidDiff > 0.5 || startEndDiff > 0.5) {
+				this.zoom = 6;
+			} else if (startMidDiff > 0.05 || startEndDiff > 0.05) {
+				this.zoom = 10;
+			} else {
+				this.zoom = 12;
 			}
 		},
 		/**
@@ -244,7 +277,7 @@ export default {
 			const heatpoints = routeGeos.flat(1);
 			if (heatpoints && heatpoints.length) {
 				this.heatmap = L.heatLayer(heatpoints, { radius: 3, blur: 1 }).addTo(this.mapRef.mapObject);
-				this.centerOnRouteStart(heatpoints);
+				this.centerOnRoute(heatpoints);
 			} else {
 				console.warn('No heatmap points found.');
 			}
