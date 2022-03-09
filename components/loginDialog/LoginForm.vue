@@ -3,7 +3,7 @@
 		class="ma-0 pa-0">
 		<v-card-text>
 			<v-container>
-				<v-row>
+				<v-row justify="center">
 					<v-col cols="12">
 						<v-text-field
 							v-model="form.email"
@@ -19,6 +19,16 @@
 							required
 						></v-text-field>
 					</v-col>
+					<v-alert
+						v-if="failedLogin"
+						dense
+						icon="mdi-alert-circle"
+						dark
+						shaped
+						color="error">
+						Wrong email/password/. Please try again!
+					</v-alert>
+
 				</v-row>
 			</v-container>
 		</v-card-text>
@@ -32,27 +42,39 @@
 </template>
 
 <script>
-import SubmitButtons from '../forms/SubmitButtons.vue'
+import SubmitButtons from '../forms/SubmitButtons.vue';
+
 export default {
 	components: { SubmitButtons },
-	data(){
+	data() {
 		return {
 			form: {
 				email: '',
 				password: ''
-			}
-		}
+			},
+			failedLogin: false
+		};
 	},
-	methods:{
-		async login(){
-			const response = await this.$store.dispatch('user/login', this.form);
-			if(response){
-				this.$emit('close');
-				this.$router.push('/dashboard');
-			} else{
-				alert('not logged in')
+	methods: {
+		async login() {
+			try {
+				this.failedLogin = false;
+				const response = await this.$store.dispatch('user/login', this.form);
+
+				if (response) {
+					this.$emit('close');
+					this.$router.push('/dashboard');
+				} else {
+					this.$alerts.setDefaultErrorSnackbar();
+				}
+			} catch (error) {
+				if (error.response.status === 401) {
+					this.failedLogin = true;
+				} else {
+					this.$alerts.setDefaultErrorSnackbar();
+				}
 			}
 		},
 	}
-}
+};
 </script>

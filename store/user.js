@@ -16,7 +16,7 @@ export const getters = {
 };
 
 export const actions = {
-	async login({ commit, getters, dispatch }, payload) {
+	async login({ commit, dispatch }, payload) {
 		const body = { ...payload, strategy: 'local' };
 		const { data } = await this.$axios.post('/authentication', body);
 		if (data && data.accessToken) {

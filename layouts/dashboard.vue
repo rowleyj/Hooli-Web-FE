@@ -37,31 +37,35 @@
 		>
 			<span>&copy; {{ new Date().getFullYear() }}</span>
 		</v-footer>
+		<global-snackbar />
 	</v-app>
 </template>
 
 <script>
 import NavMenu from '~/components/nav/NavMenu.vue';
+import GlobalSnackbar from '@/components/GlobalSnackbar.vue';
+
 export default {
-	computed:{
+	computed: {
 		/**
 		 * Check if the user has an accessToken
 		 */
-		isLoggedIn(){
-			return !!this.$store.getters['getAccessToken'];
+		isLoggedIn() {
+			return !!this.$store.getters.getAccessToken;
 		}
 	},
 	components: {
-		NavMenu
+		NavMenu,
+		GlobalSnackbar
 	},
-	data () {
+	data() {
 		return {
 			title: 'Hooli',
 			loginDialog: false
-		}
+		};
 	},
-	mounted(){
-		if(!this.isLoggedIn){
+	mounted() {
+		if (!this.isLoggedIn) {
 			console.log('redirect');
 			// TODO: not reliable... need to find different soln
 			// this.$router.push('/')
@@ -70,5 +74,5 @@ export default {
 	methods: {
 
 	}
-}
+};
 </script>

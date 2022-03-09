@@ -51,29 +51,35 @@
 		<login-dialog
 			:dialog="loginDialog"
 			@close="loginDialog = false"/>
+		<global-snackbar/>
 	</v-app>
 </template>
 
 <script>
 import LoginDialog from '~/components/loginDialog/LoginDialog.vue';
+import GlobalSnackbar from '@/components/GlobalSnackbar.vue';
+
 export default {
-	computed:{
+	computed: {
 		/**
 		 * Check if the user has an accessToken
 		 */
-		isLoggedIn(){
-			return !!this.$store.getters['getAccessToken'];
+		isLoggedIn() {
+			return !!this.$store.getters.getAccessToken;
 		}
 	},
-	components: { LoginDialog },
-	data () {
+	components: {
+		LoginDialog,
+		GlobalSnackbar
+	},
+	data() {
 		return {
 			title: 'Hooli',
 			loginDialog: false
-		}
+		};
 	},
 	methods: {
 
 	}
-}
+};
 </script>

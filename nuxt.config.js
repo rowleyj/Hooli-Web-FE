@@ -31,6 +31,7 @@ export default {
 		{ src: '~/plugins/vuex-persist', ssr: false },
 		{ src: '~/plugins/lodash', ssr: false },
 		{ src: "~/plugins/vue-echarts.js", ssr: false },
+		{ src: '~/plugins/alerts.js', ssr: false }
 	],
 
 	// Auto import components: https://go.nuxtjs.dev/config-components

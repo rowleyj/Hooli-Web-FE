@@ -34,24 +34,25 @@
 <script>
 import LoginForm from './LoginForm.vue';
 import RegisterForm from './RegisterForm.vue';
+
 export default {
 	computed: {
-		isLoginView(){
+		isLoginView() {
 			return this.view === 'login';
 		}
 	},
 	components: { LoginForm, RegisterForm },
-	data(){
+	data() {
 		return {
 			view: 'login'
-		}
+		};
 	},
 	methods: {
-		closeDialog(){
+		closeDialog() {
 			this.$emit('close');
 		},
-		toggleView(){
-			if(this.view === 'login') this.view = 'register'
+		toggleView() {
+			if (this.view === 'login') this.view = 'register';
 			else this.view = 'login';
 		}
 	},
@@ -60,5 +61,5 @@ export default {
 			default: false
 		}
 	}
-}
+};
 </script>
