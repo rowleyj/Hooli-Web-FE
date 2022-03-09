@@ -42,7 +42,7 @@ export default {
 		async deleteVideo(id) {
 			try {
 				const { status } = await this.$axios.delete(`/video/${id}`, this.axiosConfig);
-				if (status == 200) {
+				if (status === 200) {
 					this.$store.commit('videos/REMOVE_VIDEO', id);
 				}
 			} catch (error) {

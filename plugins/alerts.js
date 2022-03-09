@@ -20,12 +20,29 @@ class Alerts {
 		this.store.dispatch('snackbar/setSnackbar', style);
 	}
 
+	/**
+	 * Set custom error message
+	 * @param {String} text - custom text or key matching messages.json string
+	 */
+	async setErrorSnackbar(text) {
+		const style = {
+			text: text,
+			color: "error",
+			shape: true,
+			position: "centered"
+		};
+		this.store.dispatch('snackbar/setSnackbar', style);
+	}
+
+	/**
+	 * Sets default centered error snackbar
+	 */
 	async setDefaultErrorSnackbar() {
 		const style = {
 			text: "default_error",
 			color: "error",
 			shape: true,
-			position: "right"
+			position: "centered"
 		};
 		this.store.dispatch('snackbar/setSnackbar', style);
 	}

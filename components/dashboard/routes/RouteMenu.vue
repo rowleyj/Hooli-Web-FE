@@ -12,9 +12,9 @@
 				</v-btn>
 			</template>
 			<v-list>
-				<v-list-item @click.stop="hideRoute">
+				<!-- <v-list-item @click.stop="hideRoute">
 					<v-list-item-title>Hide</v-list-item-title>
-				</v-list-item>
+				</v-list-item> -->
 				<v-list-item @click.stop="deleteRoute">
 					<v-list-item-title>Delete</v-list-item-title>
 				</v-list-item>
@@ -25,16 +25,15 @@
 
 <script>
 export default {
-	methods:{
-		async deleteRoute(){
-			let isDeleted = await this.$store.dispatch('routes/deleteRoute', this.routeId);
-			if(!isDeleted){
-				alert('Unable to delete route!');
+	methods: {
+		async deleteRoute() {
+			const isDeleted = await this.$store.dispatch('routes/deleteRoute', this.routeId);
+			if (!isDeleted) {
+				this.$alerts.setErrorSnackbar('delete_route_failed');
 			}
 		},
-		async hideRoute(){
-			console.log('hide route');
-		}
+		// async hideRoute() {
+		// }
 	},
 	props: {
 		routeId: {
@@ -42,5 +41,5 @@ export default {
 			default: ''
 		}
 	}
-}
+};
 </script>

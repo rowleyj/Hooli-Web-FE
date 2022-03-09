@@ -62,9 +62,10 @@
 </template>
 
 <script>
-import SubmitButtons from '../forms/SubmitButtons.vue'
+import SubmitButtons from '../forms/SubmitButtons.vue';
+
 export default {
-	components:{
+	components: {
 		SubmitButtons
 	},
 	data() {
@@ -76,7 +77,7 @@ export default {
 				email: null,
 				password: null
 			},
-			rules:{
+			rules: {
 				name: [
 					(val) => !!val || 'This field is required'
 				],
@@ -95,18 +96,21 @@ export default {
 					(val) => !!val || 'This field is required'
 				],
 			},
-		}
+		};
 	},
 	methods: {
-		async register(){
-			let { data, status } = await this.$axios.post('/users', this.form);
-			console.log(data, status);
-			if(status === 201){
-				this.$emit('change-view');
-			}else{
-				alert('Unable to create account')
+		async register() {
+			try {
+				const { status } = await this.$axios.post('/users', this.form);
+				if (status === 201) {
+					this.$emit('change-view');
+				} else {
+					this.$alerts.setErrorSnackbar('create_account_failed');
+				}
+			} catch (error) {
+				this.$alerts.setDefaultErrorSnackbar();
 			}
 		}
 	}
-}
+};
 </script>

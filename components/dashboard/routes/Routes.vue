@@ -191,12 +191,14 @@ export default {
 					custom: true
 				};
 				const { data, status } = await this.$axios.post('/route', payload, axiosConfig);
-				console.log(data, status);
 				if (data && status === 201) {
 					this.$store.commit('routes/ADD_ROUTE', data);
 					this.cancelDraw();
+				} else {
+					this.$alerts.setErrorSnackbar('save_drawn_route_failed');
 				}
 			} catch (error) {
+				this.$alerts.setDefaultErrorSnackbar();
 				console.error(error);
 			}
 		},

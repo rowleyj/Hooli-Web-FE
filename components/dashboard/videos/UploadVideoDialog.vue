@@ -48,35 +48,36 @@
 
 <script>
 import VideoInput from './VideoInput.vue';
-import SubmitButtons from '../../forms/SubmitButtons.vue'
+import SubmitButtons from '../../forms/SubmitButtons.vue';
 
 export default {
 	computed: {
 		accessToken() {
-			return this.$store.getters['getAccessToken'];
+			return this.$store.getters.getAccessToken;
 		},
 		axiosConfig() {
-			return this.$store.getters['getAxiosConfig'];
+			return this.$store.getters.getAxiosConfig;
 		}
 	},
 	components: {
 		SubmitButtons,
-		VideoInput },
-	data(){
+		VideoInput
+	},
+	data() {
 		return {
 			dialog: false,
 			videoFile: null,
 			title: ''
-		}
+		};
 	},
 	methods: {
-		closeDialog(){
+		closeDialog() {
 			this.dialog = false;
 		},
 		/**
 		 * Handles child component video file change
 		 */
-		updateVideo(newVideoFile){
+		updateVideo(newVideoFile) {
 			this.videoFile = newVideoFile;
 		},
 		/**
@@ -94,26 +95,28 @@ export default {
 		/**
 		 * Upload a single ride video to server
 		 */
-		async uploadVideo(){
+		async uploadVideo() {
 			try {
-				console.log('upload video')
 				const formData = new FormData();
 				formData.append("video", this.videoFile);
 				formData.append("title", this.title);
 
-				let uploaded = this.$store.dispatch('videos/uploadVideo', {
+				const uploaded = this.$store.dispatch('videos/uploadVideo', {
 					axiosConfig: this.axiosConfig,
 					formData
 				});
 
-				if(uploaded) this.closeDialog();
-				else alert('unable to upload!');
+				if (uploaded) this.closeDialog();
+				else {
+					this.$alerts.setErrorSnackbar('upload_video_failed');
+				}
 			} catch (error) {
+				this.$alerts.setDefaultErrorSnackbar();
 				console.log(error);
 			}
 		}
 	},
 	props: {
 	}
-}
+};
 </script>

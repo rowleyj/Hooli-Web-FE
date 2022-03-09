@@ -1,3 +1,9 @@
 {
-	"default_error": "An error has occured. Please contact support."
+	"create_activity_error": "Unable to create activity, please try again later!",
+	"create_account_failed": "Unable to create account, please confirm your information.",
+	"default_error": "An error has occured. Please contact support.",
+	"delete_route_failed": "Unable to delete route, please try again later!",
+	"logout_failure": "Unable to logout, please try again later!",
+	"save_drawn_route_failed": "Unable to save drawn route, please try again later!",
+	"upload_video_failed": "Unable to upload video, please try again later!"
 }

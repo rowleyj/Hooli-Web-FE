@@ -16,7 +16,6 @@ const getAuthTokenCookie = (cookieHeader) => {
 export default function ({
 	req, store, redirect, route
 }) {
-	console.log(route.path);
 	const paths = route.path.split('/');
 	const firstLayerRoute = paths.length > 1 ? paths[1] : null;
 	if (protectedRoutes.includes(firstLayerRoute)) {

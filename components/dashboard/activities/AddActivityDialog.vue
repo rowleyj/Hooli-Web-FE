@@ -98,7 +98,6 @@ export default {
 		 * Handles child component video file change
 		 */
 		updateVideo(newVideoFile) {
-			console.log('updating video', newVideoFile);
 			this.videoFile = newVideoFile;
 		},
 		/**
@@ -117,7 +116,7 @@ export default {
 			});
 		},
 		/**
-		 * Uploades video, then uploads activity
+		 * Uploads video, then uploads activity
 		 */
 		async processActivity() {
 			try {
@@ -126,7 +125,9 @@ export default {
 				const activity = await this.createActivity(url);
 				this.processing = false;
 				if (activity) this.closeDialog();
-				else alert('error');
+				else {
+					this.$alerts.setErrorSnackbar('create_activity_error');
+				}
 			} catch (error) {
 				console.error(error);
 				this.processing = false;
@@ -149,13 +150,13 @@ export default {
 
 				const { data, status } = await this.$axios.post('/ride', body, this.axiosConfig);
 				if (status === 201) {
-					console.log(data);
 					this.$store.commit('activities/ADD_RIDE', data);
 					return data;
 				}
 				throw Error('unable to add video');
 			} catch (error) {
-				console.log(error);
+				this.$alerts.setErrorSnackbar('create_activity_error');
+				console.error(error);
 			}
 		},
 		/**

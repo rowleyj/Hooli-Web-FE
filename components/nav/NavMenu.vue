@@ -28,15 +28,15 @@ export default {
 		 */
 		async logout() {
 			try {
-				console.log('logging out')
 				await this.$store.dispatch('logout');
-				this.$router.push('/')
+				this.$router.push('/');
 			} catch (error) {
+				this.$alerts.setErrorSnackbar('logout_failure');
 				console.error(error);
 			}
 		}
 	}
-}
+};
 </script>
 
 <style>
