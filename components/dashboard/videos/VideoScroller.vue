@@ -1,12 +1,9 @@
 <template>
 	<v-card class="text-center mx-4">
-		<video
-			width="100%"
-		>
-			<source
-				:src="videoUrl"
-				type="video/mp4">
-			Your browser does not support the video tag. </video>
+		<video-and-canvas
+			:videoUrl="videoUrl"
+		/>
+
 		<v-toolbar
 			color="accent"
 			dense
@@ -29,6 +26,8 @@
 </template>
 
 <script>
+import VideoAndCanvas from './VideoAndCanvas.vue';
+
 export default {
 	computed: {
 		maxState() {
@@ -45,11 +44,14 @@ export default {
 			return this.currentClosePassUrl;
 		}
 	},
+	components: {
+		VideoAndCanvas
+	},
 	data() {
 		return {
 			state: 0,
 			closePasses: {}, // caching mechanism for closePasses
-			currentClosePassUrl: ''
+			currentClosePassUrl: '',
 		};
 	},
 	methods: {

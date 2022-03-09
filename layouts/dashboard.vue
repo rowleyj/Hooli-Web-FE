@@ -3,6 +3,7 @@
 		<v-app-bar
 			fixed
 			app
+			style="z-index: 500;"
 		>
 			<v-btn
 				fab

@@ -25,13 +25,13 @@
 				class="ma-2">
 				<video
 					height="200px"
+					controls
 				>
 					<source
 						:src="video.url"
 						type="video/mp4">
 					Your browser does not support the video tag. </video>
 			</v-row>
-
 
 		</v-card>
 	</v-container>
@@ -42,16 +42,14 @@ export default {
 	props: {
 		video: {
 			type: Object,
-			default: () => {
-				return {
-					title: '',
-					_id: '',
-					url: ''
-				}
-			}
+			default: () => ({
+				title: '',
+				_id: '',
+				url: ''
+			})
 		}
 	}
-}
+};
 </script>
 
 <style>
