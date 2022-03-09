@@ -59,6 +59,10 @@ export default {
 		baseURL: 'http://localhost:8080'
 	},
 
+	router: {
+		middleware: ['authenticated'],
+	},
+
 	// PWA module configuration: https://go.nuxtjs.dev/pwa
 	pwa: {
 		manifest: {

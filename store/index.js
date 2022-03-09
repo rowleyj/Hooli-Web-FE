@@ -1,3 +1,9 @@
+import cookies from 'browser-cookies';
+
+function clearAuthCookie() {
+	cookies.erase('token');
+}
+
 export const state = () => ({
 	accessToken: null
 });
@@ -24,5 +30,6 @@ export const actions = {
 		commit('routes/CLEAR_ROUTES');
 		commit('videos/CLEAR_VIDEOS');
 		commit('activities/CLEAR_RIDES');
+		clearAuthCookie();
 	}
 };

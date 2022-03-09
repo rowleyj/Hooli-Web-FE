@@ -68,7 +68,8 @@ export default {
 					this.$alerts.setDefaultErrorSnackbar();
 				}
 			} catch (error) {
-				if (error.response.status === 401) {
+				console.error(error);
+				if (error && error.response && error.response.status === 401) {
 					this.failedLogin = true;
 				} else {
 					this.$alerts.setDefaultErrorSnackbar();

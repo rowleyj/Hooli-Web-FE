@@ -1,3 +1,13 @@
+import cookies from 'browser-cookies';
+
+function setAuthCookie(token) {
+	cookies.set('token', token, {
+		expires: 7,
+		secure: true,
+		samesite: 'Strict'
+	});
+}
+
 export const state = () => ({
 	user: null,
 });
@@ -22,6 +32,7 @@ export const actions = {
 		if (data && data.accessToken) {
 			commit('SET_ACCESS_TOKEN', data.accessToken, { root: true });
 			commit('SET_USER', data.users);
+			setAuthCookie(data.accessToken);
 
 			const axiosConfig = {
 				headers: {
