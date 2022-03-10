@@ -17,6 +17,16 @@
 </template>
 
 <script>
+/**
+ * List of boxes over a time interval (start - end)
+ */
+class BoundingCube {
+	constructor(start, end, boxes) {
+		this.start = start;
+		this.end = end;
+		this.boxes = boxes;
+	}
+}
 
 export default {
 	data() {
@@ -38,12 +48,17 @@ export default {
 				self.canvas.height = this.videoHeight - controlSize;
 				self.canvas.width = this.videoWidth;
 
-				if (this.boundingCube) self.drawBoxes();
+				if (this.boundingCubes) self.drawCubes();
 			});
 		},
-		drawBoxes() {
+		drawCubes() {
+			this.boundingCubes.forEach((cube, idx) => {
+				this.drawBoxes(idx);
+			});
+		},
+		drawBoxes(cubeIdx) {
 			const { video } = this.$refs;
-			const { start, end, boxes } = this.boundingCube;
+			const { start, end, boxes } = this.boundingCubes[cubeIdx];
 
 			video.addEventListener('timeupdate', (e) => {
 				// convert current time to box index
@@ -51,9 +66,9 @@ export default {
 				if (currentTime > start && currentTime < end && boxes && boxes.length) {
 					const timeSinceStart = currentTime - start;
 					const timeDelta = (end - start) / boxes.length;
-					const updateIdx = Math.round(timeSinceStart / timeDelta);
+					const boxIdx = Math.round(timeSinceStart / timeDelta);
 
-					this.drawBox(updateIdx);
+					this.drawBox(boxIdx);
 				}
 
 				// enforce clear canvas when nothing is running
@@ -62,13 +77,11 @@ export default {
 				}
 			});
 		},
-		drawBox(boxIdx) {
-			// clear last box
-			this.clearCanvas();
+		drawBox(cubeIdx, boxIdx) {
 			const ctx = this.canvas.getContext('2d');
 			const {
 				x, x1, y, y1
-			} = this.boundingCube.boxes[boxIdx];
+			} = this.boundingCubes[cubeIdx].boxes[boxIdx];
 
 			ctx.strokeRect(x, y, x1, y1);
 		},
@@ -89,13 +102,8 @@ export default {
 			// if videoUrl changes at all then we should clear the canvas
 			this.clearCanvas();
 		},
-		boundingCube: {
-			type: Object,
-			default: () => ({
-				start: 0,
-				end: 0,
-				boxes: []
-			})
+		boundingCubes: {
+			type: [BoundingCube]
 		}
 	}
 };
