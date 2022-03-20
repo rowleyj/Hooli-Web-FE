@@ -9,7 +9,7 @@
 			:center="[centerLat, centerLong]">
 
 			<l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
-			<l-marker :lat-lng="[centerLat,centerLong]"></l-marker>
+			<!-- <l-marker :lat-lng="[centerLat,centerLong]"></l-marker> -->
 			<slot name="route">
 			</slot>
 			<slot name="closepassmarkers">
@@ -116,16 +116,17 @@ export default {
 		 * Disables routing, removing routing layers and itinerary
 		 */
 		disableRouting() {
+			this.route = this.route.splice(0, this.route.length);
 			this.map.removeLayer(this.routingLayer);
 			this.map.removeControl(this.routingLayer);
-			this.route = this.route.splice(0, this.route.length);
+			console.log(this.route);
 			this.routingLayer = null;
 		},
 		/**
 		 * Updates local state route and pushes route params up to be saved by parent component to db
 		 */
 		updateRoute(newRoute) {
-			this.routingLayer.setWaypoints(newRoute);
+			if (this.routingLayer) this.routingLayer.setWaypoints(newRoute);
 		}
 	},
 	props: {
