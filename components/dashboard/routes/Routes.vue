@@ -77,6 +77,7 @@
 						justify="center">
 						<Map
 							@register-map="registerMap"
+							@update-route="updateDrawnRoute"
 							:drawing="drawingRoute"
 							:height="600"
 							width="100%"
@@ -236,6 +237,12 @@ export default {
 			}
 		},
 		/**
+		 * Set route values based on routing coordinates (not keeping other information)
+		 */
+		updateDrawnRoute(route) {
+			if (route.length) this.newRoute = route[0].coordinates;
+		},
+		/**
 		 * Registers a reference to the map so we can draw on it
 		 */
 		registerMap(mapRef) {
@@ -254,13 +261,6 @@ export default {
 		 */
 		drawRoute() {
 			this.drawingRoute = true;
-			this.mapRef.mapObject.on('draw:drawvertex', (e) => {
-				const { layers } = e;
-				const polyLayers = Object.values(layers._layers).filter(layer => layer._latlng && layer._latlng.lat);
-				polyLayers.forEach(layer => {
-					this.newRoute[layer._leaflet_id] = { ...layer._latlng };
-				});
-			});
 		},
 		/**
 		 * Toggles heatmap view
