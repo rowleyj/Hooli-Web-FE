@@ -69,7 +69,7 @@
 					flat
 					height="100%"
 					width="100%"
-					class="mx-auto pa-2">
+					class="mx-auto">
 					<map-toolbar
 						@toggle-heatmap="toggleHeatmap"
 					/>
@@ -152,8 +152,8 @@ export default {
 			},
 			zoom: 12,
 			center: {
-				lat: 50,
-				long: 85
+				lat: 43.2609,
+				long: 79.9192
 			},
 			heatmap: null,
 		};
@@ -163,9 +163,15 @@ export default {
 		 * Select a route to show on the map
 		 */
 		selectRoute(route) {
-			this.selectedRoute = route;
-			this.routeToShow.latlngs = route.geo.coordinates;
-			this.centerOnRoute(route.geo.coordinates);
+			if (route && this.selectedRoute && route._id === this.selectedRoute._id) {
+				// unselect route
+				this.selectedRoute = null;
+				this.routeToShow.latlngs = [];
+			} else {
+				this.selectedRoute = route;
+				this.routeToShow.latlngs = route.geo.coordinates;
+				this.centerOnRoute(route.geo.coordinates);
+			}
 		},
 		/**
 		 * Centers on map using start, end and middle of route

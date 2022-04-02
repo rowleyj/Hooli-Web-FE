@@ -1,8 +1,15 @@
 <template>
 	<v-dialog
 		v-model="dialog"
+		transition="dialog-bottom-transition"
+		scrollable
 		width="600">
-		<template v-slot:activator="{ on, attrs }">
+		<template
+			v-slot:activator="
+				{
+					on,
+					attrs
+				}">
 			<v-btn
 				v-if="isMobile"
 				x-small
@@ -26,44 +33,48 @@
 				</span>
 			</v-btn>
 		</template>
-		<v-card>
-			<v-card-title>
-				<span class="text-h5">
-					Add New Activity
-				</span>
-				<v-spacer></v-spacer>
-				<v-btn
-					small
-					icon
-					@click="closeDialog">
-					<v-icon>mdi-close</v-icon>
-				</v-btn>
-			</v-card-title>
-			<v-divider class="mt-2"></v-divider>
-			<v-card-text>
-				<v-text-field
-					label="Title"
-					v-model="title"></v-text-field>
-				<v-textarea
-					label="Description"
-					v-model="description"></v-textarea>
-				<v-file-input
-					v-model="rideFile"
-					label="Ride File"
-					prepend-icon="mdi-bicycle"
-					hint="We use your data to calculate speed, calories burned, and show your route"
-					accept="application/json"></v-file-input>
-				<video-input
-					@change="updateVideo"/>
-			</v-card-text>
-			<submit-buttons
-				submit-text="Create Activity"
-				@submit="processActivity()"
-				@close="closeDialog"
-				:loading="processing"
-				:disabled="processing"
-			/>
-		</v-card>
+		<v-container
+			class="ma-0 pa-0">
+			<v-card >
+				<v-card-title>
+					<span class="text-h5">
+						Add New Activity
+					</span>
+					<v-spacer></v-spacer>
+					<v-btn
+						small
+						icon
+						@click="closeDialog">
+						<v-icon>mdi-close</v-icon>
+					</v-btn>
+				</v-card-title>
+				<v-divider class="mt-2"></v-divider>
+				<v-card-text>
+					<v-text-field
+						label="Title"
+						v-model="title"></v-text-field>
+					<v-textarea
+						label="Description"
+						v-model="description"></v-textarea>
+					<v-file-input
+						v-model="rideFile"
+						label="Ride File"
+						prepend-icon="mdi-bicycle"
+						hint="We use your data to calculate speed, calories burned, and show your route"
+						accept="application/json"></v-file-input>
+					<video-input
+						@change="updateVideo"/>
+				</v-card-text>
+				<submit-buttons
+					submit-text="Create Activity"
+					@submit="processActivity()"
+					@close="closeDialog"
+					:loading="processing"
+					:disabled="processing"
+				/>
+			</v-card>
+		</v-container>
+
 	</v-dialog>
 </template>
 
@@ -111,7 +122,11 @@ export default {
 			return new Promise((resolve, reject) => {
 				const fileReader = new FileReader();
 				fileReader.onload = event => resolve(JSON.parse(event.target.result));
-				fileReader.onerror = error => reject(error);
+				fileReader.onerror = error => {
+					this.processing = false;
+					this.$alerts.setErrorSnackbar('create_activity_error');
+					reject(error);
+				};
 				fileReader.readAsText(file);
 			});
 		},
@@ -151,6 +166,7 @@ export default {
 				const { data, status } = await this.$axios.post('/ride', body, this.axiosConfig);
 				if (status === 201) {
 					this.$store.commit('activities/ADD_RIDE', data);
+					this.$store.dispatch('routes/getRoute', data.routeId);
 					return data;
 				}
 				throw Error('unable to add video');

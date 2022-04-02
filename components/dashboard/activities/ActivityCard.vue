@@ -1,6 +1,6 @@
 <template>
 	<v-card
-		class="mb-8 mt-4 pb-2"
+		class="ma-2"
 		max-height="65vh"
 		width="100vh"
 		@click="viewActivity"

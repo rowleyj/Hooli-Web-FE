@@ -3,7 +3,9 @@
 		class="mb-4"
 		color="accent"
 		height="54">
-		<v-row align="center">
+		<v-row
+			align="center"
+			no-gutters>
 			<v-col
 				cols="10"
 				md="4">

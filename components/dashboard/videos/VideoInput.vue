@@ -2,19 +2,15 @@
 	<div>
 		<v-row
 			v-if="videoUrl != null"
-			no-gutters>
-			<v-col
-				cols="12"
-			>
-				<!-- Video -->
-				<video
-					width="100%"
-					style="max-height: 300px;"
-					id="myVideo"
-					controls>
-					<source :src="videoUrl" /> Your browser does not support video.
-				</video>
-			</v-col>
+			no-gutters
+			justify="center">
+			<!-- Video -->
+			<video
+				style="max-height: 250px;"
+				id="myVideo"
+				controls>
+				<source :src="videoUrl" /> Your browser does not support video.
+			</video>
 		</v-row>
 		<v-file-input
 			v-model="videoFile"
@@ -28,11 +24,11 @@
 
 <script>
 export default {
-	data(){
+	data() {
 		return {
 			videoUrl: null,
 			videoFile: null,
-		}
+		};
 	},
 	methods: {
 		/**
@@ -51,9 +47,9 @@ export default {
 		/**
          * Emits an event for parent component to pick up on video change
          */
-		emitVideoChange(){
+		emitVideoChange() {
 			this.$emit('change', this.videoFile);
 		}
 	}
-}
+};
 </script>

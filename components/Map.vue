@@ -117,6 +117,8 @@ export default {
 		 */
 		disableRouting() {
 			this.route = this.route.splice(0, this.route.length);
+			console.log('disable routing');
+			this.updateRoute([]);
 			this.map.removeLayer(this.routingLayer);
 			this.map.removeControl(this.routingLayer);
 			console.log(this.route);
@@ -160,7 +162,7 @@ export default {
 			if (isDrawing) {
 				this.enableDraw();
 				this.enableRouting();
-			} else if (this.routingLayer) {
+			} else {
 				this.disableRouting();
 				this.disableDraw();
 			}
