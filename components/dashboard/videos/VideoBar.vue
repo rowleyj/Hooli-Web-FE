@@ -20,21 +20,22 @@
 </template>
 
 <script>
-import UploadVideoDialog from './UploadVideoDialog.vue'
+import UploadVideoDialog from './UploadVideoDialog.vue';
+
 export default {
 	components: {
 		UploadVideoDialog
 
-	 },
+	},
 	methods: {
 		/**
 		 * Search and filter the users activities
 		 */
-		search(){
+		search() {
 
 		}
 	}
-}
+};
 </script>
 
 <style>

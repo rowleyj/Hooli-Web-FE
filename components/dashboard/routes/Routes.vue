@@ -90,12 +90,6 @@
 									:color="routeToShow.color"> </l-polyline>
 							</template>
 							<template v-slot:closepassmarkers>
-								<!-- <div
-									v-for="(closePass, index) in closePasses"
-									:key="`closePass${index}`">
-									<l-marker
-										:lat-lng="[closePass.lat, closePass.long]"></l-marker>
-								</div> -->
 
 							</template>
 						</Map>
